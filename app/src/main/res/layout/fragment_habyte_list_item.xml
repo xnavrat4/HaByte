@@ -26,40 +26,40 @@
             tools:text="habit name" />
 
 
-            <TextView
-                android:id="@+id/upcoming_habit_label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/start_date_label"
-                app:layout_constraintTop_toBottomOf="@id/habit_name"
-                tools:text="upcoming date" />
-            <TextView
-                android:id="@+id/upcoming_habit_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/start_date_text"
-                app:layout_constraintTop_toBottomOf="@id/upcoming_habit_label"
-                tools:text="zitra" />
+        <TextView
+            android:id="@+id/upcoming_habit_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/start_date_label"
+            app:layout_constraintTop_toBottomOf="@id/habit_name"
+            tools:text="upcoming date" />
+        <TextView
+            android:id="@+id/upcoming_habit_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/start_date_text"
+            app:layout_constraintTop_toBottomOf="@id/upcoming_habit_label"
+            tools:text="zitra" />
 
 
-            <TextView
-                android:id="@+id/start_date_label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@id/upcoming_habit_label"
-                app:layout_constraintEnd_toStartOf="@id/end_date_label"
-                app:layout_constraintTop_toBottomOf="@id/habit_name"
-                tools:text="start date" />
-            <TextView
-                android:id="@+id/start_date_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@id/upcoming_habit_text"
-                app:layout_constraintEnd_toStartOf="@id/end_date_text"
-                app:layout_constraintTop_toBottomOf="@id/start_date_label"
-                tools:text="vcera" />
+        <TextView
+            android:id="@+id/start_date_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/upcoming_habit_label"
+            app:layout_constraintEnd_toStartOf="@id/end_date_label"
+            app:layout_constraintTop_toBottomOf="@id/habit_name"
+            tools:text="start date" />
+        <TextView
+            android:id="@+id/start_date_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/upcoming_habit_text"
+            app:layout_constraintEnd_toStartOf="@id/end_date_text"
+            app:layout_constraintTop_toBottomOf="@id/start_date_label"
+            tools:text="vcera" />
 
         <TextView
             android:id="@+id/end_date_label"
@@ -86,7 +86,7 @@
             android:gravity="right"
             android:text="20/100"
             app:layout_constraintTop_toBottomOf="@id/end_date_text"
-         />
+            />
 
         <ProgressBar
             android:id="@+id/bar"
