@@ -10,78 +10,55 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@android:color/transparent"
         android:paddingStart="16dp"
         android:paddingTop="16dp"
         android:paddingEnd="8dp"
         android:paddingBottom="16dp">
-        <!--            android:textAlignment="left"-->
+
         <TextView
             android:id="@+id/habit_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textAppearance="@style/TextRegular.Large"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/done_button"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="habit name" />
 
         <TextView
-            android:id="@+id/start_date"
+            android:id="@+id/time_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textAppearance="@style/TextMedium.Large"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/done_button"
             app:layout_constraintTop_toBottomOf="@id/habit_name"
-            tools:text="Start date" />
+            tools:text="time" />
 
         <Button
             android:id="@+id/done_button"
-            android:layout_width="0dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:theme="@style/Button.Green"
+            android:backgroundTint="@android:color/holo_green_dark"
             app:layout_constraintStart_toEndOf="@id/habit_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:text="DONE"
             />
 
-        <TextView
-            android:id="@+id/notif_info"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/done_button"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="notifInfo" />
 
-        <EditText
-            android:id="@+id/additional_info"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/notif_info"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text="Aditional info..."
-            />
-
-
-            <Button
-                android:id="@+id/image_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/additional_info"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:text="insert image here"
-                />
-
-        <Button
+        <ImageButton
             android:id="@+id/expandable_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/image_button"
+            app:layout_constraintTop_toBottomOf="@id/done_button"
+            android:backgroundTint="@android:color/transparent"
+            android:layout_gravity="center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:drawableLeft="@android:drawable/arrow_up_float"
+            android:src="@android:drawable/arrow_down_float"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
