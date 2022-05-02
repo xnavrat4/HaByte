@@ -23,4 +23,13 @@ class HabyteRepository(
             }
         }
 
+    fun getById(id: Long) : HabytePresentableListItem {
+        return HabytePresentableListItem(
+            id = id,
+            name = "random, no database yet" ,
+            startDate = LocalDate.now(),
+            endDate = LocalDate.now().plusDays(1 + id),
+            progress = 1
+        )
+    }
 }

@@ -32,6 +32,7 @@ class HabyteList : Fragment() {
 
         val adapter = HabyteAdapter(
             onItemClick = {
+                findNavController().navigate(HabyteListDirections.actionHabyteListFragmentToHabyteDetailFragment(it.id.toString()))
             },
         )
 

@@ -54,10 +54,6 @@
                 android:drawableLeft="@android:drawable/ic_menu_edit"
                 />
 
-
-
-
-
             <TextView
                 android:id="@+id/start_date_label"
                 android:layout_width="0dp"
