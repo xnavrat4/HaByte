@@ -13,6 +13,17 @@ class HabyteViewHolder(private val binding: FragmentHabyteListItemBinding)
             onItemClick: (HabytePresentableListItem) -> Unit
         ) {
             binding.habitName.text = listItem.name
+            binding.startDateText.text = listItem.startDate.toString()
+            binding.endDateText.text = listItem.endDate.toString()
+
+            val differenceInDays = listItem.startDate.until(listItem.endDate).days
+
+            val prog = listItem.progress.toString() + "/" + differenceInDays.toString()
+            binding.progressLabel.text = prog
+
+            binding.bar.max = differenceInDays
+            binding.bar.progress = listItem.progress
+
             binding.cardContainer.setOnClickListener {
                 onItemClick(listItem)
             }
