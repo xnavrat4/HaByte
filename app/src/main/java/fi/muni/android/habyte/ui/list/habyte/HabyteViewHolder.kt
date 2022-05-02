@@ -16,6 +16,7 @@ class HabyteViewHolder(private val binding: FragmentHabyteListItemBinding)
             binding.startDateText.text = listItem.startDate.toString()
             binding.endDateText.text = listItem.endDate.toString()
 
+            // TODO: refactor, repeating code
             val differenceInDays = listItem.startDate.until(listItem.endDate).days
 
             val prog = listItem.progress.toString() + "/" + differenceInDays.toString()

@@ -1,4 +1,4 @@
-package fi.muni.android.habyte.ui
+package fi.muni.android.habyte.ui.detail
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,6 @@ import androidx.navigation.fragment.findNavController
 import fi.muni.android.habyte.R
 import fi.muni.android.habyte.databinding.FragmentHabyteDetailBinding
 import fi.muni.android.habyte.repository.HabyteRepository
-import java.io.Console
 
 
 class HabyteDetailFragment : Fragment() {
@@ -38,6 +37,7 @@ class HabyteDetailFragment : Fragment() {
             findNavController().navigateUp()
         }
 
+        // TODO: refactor, repeating code
         val habyteId = HabyteDetailFragmentArgs.fromBundle(requireArguments()).id
         val listItem = habyteRepository.getById(habyteId.toLong())
 
