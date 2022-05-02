@@ -4,6 +4,8 @@ import androidx.recyclerview.widget.RecyclerView
 import fi.muni.android.habyte.data.HabytePresentableListItem
 import fi.muni.android.habyte.databinding.FragmentHabyteListBinding
 import fi.muni.android.habyte.databinding.FragmentHabyteListItemBinding
+import fi.muni.android.habyte.util.daysUntil
+import fi.muni.android.habyte.util.progressAsString
 
 class HabyteViewHolder(private val binding: FragmentHabyteListItemBinding)
     : RecyclerView.ViewHolder(binding.root) {
@@ -16,14 +18,10 @@ class HabyteViewHolder(private val binding: FragmentHabyteListItemBinding)
             binding.startDateText.text = listItem.startDate.toString()
             binding.endDateText.text = listItem.endDate.toString()
 
-            // TODO: refactor, repeating code
-            val differenceInDays = listItem.startDate.until(listItem.endDate).days
-
-            val prog = listItem.progress.toString() + "/" + differenceInDays.toString()
-            binding.progressLabel.text = prog
-
-            binding.bar.max = differenceInDays
+            val totalDays = listItem.startDate.daysUntil(listItem.endDate)
+            binding.bar.max = totalDays
             binding.bar.progress = listItem.progress
+            binding.progressLabel.text = listItem.progress.progressAsString(totalDays)
 
             binding.cardContainer.setOnClickListener {
                 onItemClick(listItem)

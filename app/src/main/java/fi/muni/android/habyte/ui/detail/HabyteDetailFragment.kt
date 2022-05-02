@@ -9,6 +9,8 @@ import androidx.navigation.fragment.findNavController
 import fi.muni.android.habyte.R
 import fi.muni.android.habyte.databinding.FragmentHabyteDetailBinding
 import fi.muni.android.habyte.repository.HabyteRepository
+import fi.muni.android.habyte.util.daysUntil
+import fi.muni.android.habyte.util.progressAsString
 
 
 class HabyteDetailFragment : Fragment() {
@@ -37,7 +39,6 @@ class HabyteDetailFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        // TODO: refactor, repeating code
         val habyteId = HabyteDetailFragmentArgs.fromBundle(requireArguments()).id
         val listItem = habyteRepository.getById(habyteId.toLong())
 
@@ -45,12 +46,9 @@ class HabyteDetailFragment : Fragment() {
         binding.startDateText.text = listItem.startDate.toString()
         binding.endDateText.text = listItem.endDate.toString()
 
-        val differenceInDays = listItem.startDate.until(listItem.endDate).days
-
-        val prog = listItem.progress.toString() + "/" + differenceInDays.toString()
-        binding.progressLabel.text = prog
-
-        binding.bar.max = differenceInDays
+        val totalDays = listItem.startDate.daysUntil(listItem.endDate)
+        binding.bar.max = totalDays
         binding.bar.progress = listItem.progress
+        binding.progressLabel.text = listItem.progress.progressAsString(totalDays)
     }
 }
