@@ -33,7 +33,7 @@ class HabyteDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.toolbar.setNavigationIcon(R.drawable.ic_home_black_24dp)
+        binding.toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
