@@ -39,6 +39,6 @@ class HabyteList : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
 
-        adapter.submitList(habyteRepository.getMockedData(10))
+        adapter.submitList(habyteRepository.getMockedData())
     }
 }

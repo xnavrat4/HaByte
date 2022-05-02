@@ -5,9 +5,7 @@ import fi.muni.android.habyte.data.HabytePresentableListItem
 import java.time.LocalDate
 import java.util.*
 
-class HabyteRepository(
-    context: Context
-) {
+class HabyteRepository(context: Context) {
 
     fun getMockedData(count: Int = 10) : List<HabytePresentableListItem> =
         mutableListOf<HabytePresentableListItem>().apply {

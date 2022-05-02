@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/habit_list_fragment"
-        android:name="fi.muni.android.habyte.ui.list.HabitList"
+        android:name="fi.muni.android.habyte.ui.list.habit.HabitList"
         android:label="HabitList"
         tools:layout="@layout/fragment_habit_list" >
 
