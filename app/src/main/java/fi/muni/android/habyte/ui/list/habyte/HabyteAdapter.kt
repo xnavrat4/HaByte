@@ -2,32 +2,32 @@ package fi.muni.android.habyte.ui.list.habyte
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-import fi.muni.android.habyte.data.HabytePresentableListItem
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import fi.muni.android.habyte.databinding.FragmentHabyteListItemBinding
+import fi.muni.android.habyte.model.Habyte
 
 class HabyteAdapter(
-    private val onItemClick: (HabytePresentableListItem) -> Unit
-): RecyclerView.Adapter<HabyteViewHolder>() {
-
-    private var listItems: MutableList<HabytePresentableListItem> = mutableListOf()
-
+    private val onItemClick: (Habyte) -> Unit
+): ListAdapter<Habyte, HabyteViewHolder>(HabyteComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HabyteViewHolder {
         val binding = FragmentHabyteListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return  HabyteViewHolder(binding)
+        return HabyteViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: HabyteViewHolder, position: Int) {
-        holder.bind(listItems[position], onItemClick)
+        val current = getItem(position)
+        holder.bind(current, onItemClick)
     }
 
-    override fun getItemCount(): Int {
-        return listItems.size
-    }
+    class HabyteComparator : DiffUtil.ItemCallback<Habyte>() {
+        override fun areItemsTheSame(oldItem: Habyte, newItem: Habyte): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-    fun submitList(newList: List<HabytePresentableListItem>) {
-        listItems = newList.toMutableList()
-        notifyDataSetChanged()
+        override fun areContentsTheSame(oldItem: Habyte, newItem: Habyte): Boolean {
+            return oldItem == newItem
+        }
     }
 }

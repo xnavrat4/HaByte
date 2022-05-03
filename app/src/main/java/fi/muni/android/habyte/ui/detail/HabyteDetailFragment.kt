@@ -5,11 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import fi.muni.android.habyte.HabyteApplication
 import fi.muni.android.habyte.R
 import fi.muni.android.habyte.databinding.FragmentHabyteDetailBinding
-import fi.muni.android.habyte.repository.HabyteRepository
-import fi.muni.android.habyte.util.daysUntil
 import fi.muni.android.habyte.util.progressAsString
 
 
@@ -17,9 +17,7 @@ class HabyteDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentHabyteDetailBinding
 
-    private val habyteRepository: HabyteRepository by lazy {
-        HabyteRepository(requireContext())
-    }
+    private lateinit var viewModel: HabyteDetailViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,7 +25,8 @@ class HabyteDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHabyteDetailBinding.inflate(
-            LayoutInflater.from(context), container, false)
+            LayoutInflater.from(context), container, false
+        )
         return binding.root
     }
 
@@ -40,15 +39,23 @@ class HabyteDetailFragment : Fragment() {
         }
 
         val habyteId = HabyteDetailFragmentArgs.fromBundle(requireArguments()).id
-        val listItem = habyteRepository.getById(habyteId.toLong())
+        val db = (activity?.application as HabyteApplication).db
+        this.viewModel = ViewModelProvider(
+            this,
+            HabyteDetailViewModelFactory(habyteId.toInt(), db.habyteDao(), db.habitDao())
+        ).get(HabyteDetailViewModel::class.java)
 
-        binding.habitName.text = listItem.name
-        binding.startDateText.text = listItem.startDate.toString()
-        binding.endDateText.text = listItem.endDate.toString()
+        viewModel.observeHabyte().observe(viewLifecycleOwner) {
+            binding.habitName.text = it.name
+            binding.startDateText.text = it.startDate.toString()
+            binding.endDateText.text = it.endDate.toString()
+            binding.bar.max = it.habitsToDo
+            binding.bar.progress = it.habitsFinished
+            binding.progressLabel.text = it.habitsFinished.progressAsString(it.habitsToDo)
+        }
 
-        val totalDays = listItem.startDate.daysUntil(listItem.endDate)
-        binding.bar.max = totalDays
-        binding.bar.progress = listItem.progress
-        binding.progressLabel.text = listItem.progress.progressAsString(totalDays)
+        binding.deleteButton.setOnClickListener {
+            viewModel.deleteHabyte()
+        }
     }
 }

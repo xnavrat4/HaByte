@@ -10,7 +10,6 @@
         android:name="fi.muni.android.habyte.ui.list.habit.HabitList"
         android:label="HabitList"
         tools:layout="@layout/fragment_habit_list" >
-
     </fragment>
 
 
@@ -33,5 +32,4 @@
             android:name="id"
             app:argType="string" />
     </fragment>
-
 </navigation>
