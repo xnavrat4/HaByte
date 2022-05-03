@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/habit_list_fragment"
-        android:name="fi.muni.android.habyte.ui.list.HabyteList"
+        android:name="fi.muni.android.habyte.ui.list.habit.HabitList"
         android:label="HabitList"
         tools:layout="@layout/fragment_habit_list" >
 
@@ -16,8 +16,22 @@
 
     <fragment
         android:id="@+id/habyte_list_fragment"
-        android:name="fi.muni.android.habyte.ui.list.HabyteList"
+        android:name="fi.muni.android.habyte.ui.list.habyte.HabyteList"
         android:label="HabyteList"
-        tools:layout="@layout/fragment_habyte_list" />
+        tools:layout="@layout/fragment_habyte_list" >
+        <action
+            android:id="@+id/action_habyte_list_fragment_to_habyte_detail_fragment"
+            app:destination="@id/habyte_detail_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/habyte_detail_fragment"
+        android:name="fi.muni.android.habyte.ui.detail.HabyteDetailFragment"
+        android:label="HabyteDetailFragment"
+        tools:layout="@layout/fragment_habyte_detail">
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
 
 </navigation>
