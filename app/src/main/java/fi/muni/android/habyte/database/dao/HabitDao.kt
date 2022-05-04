@@ -16,8 +16,8 @@ interface HabitDao {
     fun findHabitById(habitId: Int): Habit
 
     @Transaction
-    @Query("SELECT * FROM habit WHERE habyteId = :habyteId")
-    fun findHabitsByHabyte(habyteId: Int): Flow<List<Habit>>
+    @Query("SELECT * FROM habit WHERE habyteId = :habyteId order by start")
+    suspend fun findHabitsByHabyte(habyteId: Int): List<Habit>
 
     @Transaction
     @Query("SELECT * FROM habit WHERE habyteId = :habyteId AND start >= :date")
@@ -45,4 +45,7 @@ interface HabitDao {
 
     @Update
     suspend fun updateHabit(habit: Habit)
+
+    @Delete
+    suspend fun deleteHabit(habit: Habit)
 }

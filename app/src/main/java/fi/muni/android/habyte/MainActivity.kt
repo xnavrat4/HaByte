@@ -4,12 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import fi.muni.android.habyte.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -33,10 +30,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.habit_list_fragment, R.id.habyte_list_fragment
             )
         )
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        binding.toolbar.setupWithNavController(navController,appBarConfiguration)
         navView.setupWithNavController(navController)
         binding.createHabyteButton.setOnClickListener {
-            val int = Intent(this, CreateHabyteActivity::class.java)
+            val int = Intent(this, AddOrUpdateHabyteActivity::class.java)
             startActivity(int)
         }
     }

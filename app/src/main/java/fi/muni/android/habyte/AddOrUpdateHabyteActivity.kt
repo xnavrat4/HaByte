@@ -4,40 +4,45 @@ import android.os.Bundle
 import android.text.InputType
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.activity.viewModels
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.ui.AppBarConfiguration
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import fi.muni.android.habyte.databinding.ActivityCreateHabyteBinding
+import fi.muni.android.habyte.databinding.ActivityAddOrUpdateHabyteBinding
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 import java.util.*
 
-class CreateHabyteActivity : AppCompatActivity() {
+class AddOrUpdateHabyteActivity : AppCompatActivity() {
 
     private lateinit var datePicker: MaterialDatePicker<Long>
     private lateinit var timePicker: MaterialTimePicker
 
-    private val viewModel: CreateActivityViewModel by viewModels {
-        val db = (application as HabyteApplication).db
-        CreateActivityViewModelFactory(db.habyteDao(), db.habitDao())
-    }
+    private lateinit var viewModel: AddOrUpdateHabyteViewModel
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding: ActivityCreateHabyteBinding
+    private lateinit var binding: ActivityAddOrUpdateHabyteBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityCreateHabyteBinding.inflate(layoutInflater)
+        val habyteToUpdate = intent.getIntExtra("habyteId", -1)
+
+        binding = ActivityAddOrUpdateHabyteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        val db = (application as HabyteApplication).db
+        this.viewModel = ViewModelProvider(
+            this,
+            AddOrUpdateHabyteViewModelFactory(db.habyteDao(), db.habitDao(), habyteToUpdate)
+        ).get(AddOrUpdateHabyteViewModel::class.java)
         val items = listOf("Daily", "Weekly")
         val adapter = ArrayAdapter(this, R.layout.enum_list_item, items)
         binding.recurrenceEnumTextview.setAdapter(adapter)
@@ -50,10 +55,7 @@ class CreateHabyteActivity : AppCompatActivity() {
             .build()
 
         datePicker.addOnPositiveButtonClickListener {
-            val calendar: Calendar = Calendar.getInstance(TimeZone.getDefault())
-            calendar.timeInMillis = it
-            val format = SimpleDateFormat("dd/MM/yyyy")
-            val formattedDate = format.format(calendar.time)
+            val formattedDate = timestampToFormattedTime(it)
             binding.endDateText.setText(formattedDate)
         }
 
@@ -83,13 +85,23 @@ class CreateHabyteActivity : AppCompatActivity() {
             timePicker.show(supportFragmentManager, "start-time")
         }
 
-        binding.addHabyteButton.setOnClickListener {
+        if (viewModel.supportsUpdate()) {
+            binding.submitHabyteButton.text = "Update Habyte"
+        } else {
+            binding.submitHabyteButton.text = "Add Habyte"
+        }
+
+        binding.submitHabyteButton.setOnClickListener {
             val title = binding.habyteNameText.text.toString()
             val description = binding.habyteDescriptionText.text.toString()
             val startTime = binding.recurrenceStartTimeText.text.toString()
             val recurrence = binding.recurrenceEnumTextview.text.toString()
             val endDateTime = binding.endDateText.text.toString()
-            viewModel.populateHabyte(title, description, startTime, recurrence, endDateTime)
+            if (viewModel.supportsUpdate()) {
+                viewModel.updateHabyte(title, description, startTime, recurrence, endDateTime)
+            } else {
+                viewModel.createHabyte(title, description, startTime, recurrence, endDateTime)
+            }
         }
 
         viewModel.queryResult.observe(this) { result ->
@@ -102,6 +114,25 @@ class CreateHabyteActivity : AppCompatActivity() {
             }
         }
 
+        binding.toolbar.setNavigationOnClickListener {
+            finish()
+        }
+
+        if (viewModel.supportsUpdate()) {
+            viewModel.habyte.observe(this) {
+                binding.habyteNameText.setText(it.name)
+                binding.habyteDescriptionText.setText(it.description)
+                binding.endDateText.setText(it.endDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+            }
+        }
+    }
+
+    private fun timestampToFormattedTime(it: Long): String? {
+        val calendar: Calendar = Calendar.getInstance(TimeZone.getDefault())
+        calendar.timeInMillis = it
+        val format = SimpleDateFormat("dd/MM/yyyy")
+        val formattedDate = format.format(calendar.time)
+        return formattedDate
     }
 
 
