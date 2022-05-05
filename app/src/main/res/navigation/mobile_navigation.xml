@@ -32,4 +32,5 @@
             android:name="id"
             app:argType="string" />
     </fragment>
+
 </navigation>

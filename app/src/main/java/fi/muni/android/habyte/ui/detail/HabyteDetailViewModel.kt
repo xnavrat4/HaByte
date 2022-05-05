@@ -6,7 +6,7 @@ import fi.muni.android.habyte.database.dao.HabyteDao
 import fi.muni.android.habyte.model.Habyte
 import kotlinx.coroutines.launch
 
-class HabyteDetailViewModel(
+class HabyteDetailViewModel (
     private val habyteId: Int,
     private val habyteDao: HabyteDao,
     private val habitDao: HabitDao
