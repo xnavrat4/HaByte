@@ -17,6 +17,10 @@ class HabitListViewModel(private val dao: HabitDao, private val habyteDao: Habyt
         return todaysHabits
     }
 
+    suspend fun getHabitsOfHabyte(id : Int) : List<Habit> {
+        return dao.findHabitsByHabyte(id).toList();
+    }
+
     fun confirmHabit(listItem: Habit) {
         viewModelScope.launch {
             dao.updateHabit(listItem.copy(done = true))

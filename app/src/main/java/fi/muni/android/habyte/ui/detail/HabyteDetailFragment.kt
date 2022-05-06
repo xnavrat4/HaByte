@@ -3,32 +3,30 @@ package fi.muni.android.habyte.ui.detail
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.ContentResolver
-import android.content.ContentValues
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.icu.util.TimeZone
+import android.icu.text.SimpleDateFormat
+import android.icu.util.Calendar
 import android.os.Bundle
-import android.provider.CalendarContract
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.ActivityResultCallback
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import fi.muni.android.habyte.AddOrUpdateHabyteActivity
 import fi.muni.android.habyte.HabyteApplication
 import fi.muni.android.habyte.MainActivity
 import fi.muni.android.habyte.databinding.FragmentHabyteDetailBinding
+import fi.muni.android.habyte.ui.list.habit.HabitListViewModel
+import fi.muni.android.habyte.ui.list.habit.HabitListViewModelFactory
 import fi.muni.android.habyte.util.progressAsString
+import kotlinx.coroutines.runBlocking
 
 
 class HabyteDetailFragment : Fragment() {
@@ -36,6 +34,11 @@ class HabyteDetailFragment : Fragment() {
     private lateinit var binding: FragmentHabyteDetailBinding
 
     private lateinit var viewModel: HabyteDetailViewModel
+
+    val CALLENDAR_PERMISSION_CODE = 0
+
+    var habyteID = "";
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,7 +60,7 @@ class HabyteDetailFragment : Fragment() {
             this,
             HabyteDetailViewModelFactory(habyteId.toInt(), db.habyteDao(), db.habitDao())
         ).get(HabyteDetailViewModel::class.java)
-
+        habyteID = habyteId;
         viewModel.observeHabyte().observe(viewLifecycleOwner) {
             it?.let {
                 binding.habitName.text = it.name
@@ -70,97 +73,90 @@ class HabyteDetailFragment : Fragment() {
         }
 
         binding.exportButton.setOnClickListener {
-            var permissionStatus = false;
-            try {
-                val info: PackageInfo = context?.getPackageManager()!!
-                    .getPackageInfo(requireContext().packageName, PackageManager.GET_PERMISSIONS)
-                if (info.requestedPermissions != null) {
-                    for (p in info.requestedPermissions) {
-                        if (p == "WRITE_CALENDAR") {
-                            permissionStatus = true
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-
             if (ContextCompat.checkSelfPermission(
                     context as Activity,
                     Manifest.permission.WRITE_CALENDAR
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
-                val text = "Permission already granted!"
-                val duration = Toast.LENGTH_SHORT
-
-                val toast = Toast.makeText(context, text, duration)
-                toast.show()
+                createCalendarEvents();
             } else {
-                //ask for permission
-                if (ActivityCompat.shouldShowRequestPermissionRationale(
-                        context as Activity,
-                        Manifest.permission.WRITE_CALENDAR
-                    )
-                ) {
+                requestCalendarPermission();
+            }
+        }
+            binding.deleteButton.setOnClickListener {
+                viewModel.deleteHabyte()
+                findNavController().navigateUp()
+            }
 
-                } else {
-                    ActivityCompat.requestPermissions(
-                        context as Activity,
-                        Array<String>(1) { android.Manifest.permission.WRITE_CALENDAR },
-                        0
-                    )
+            binding.editButton.setOnClickListener {
+                val int = Intent(requireContext(), AddOrUpdateHabyteActivity::class.java)
+                int.putExtra("habyteId", habyteId.toInt())
+                startActivity(int)
+            }
+
+        }
+
+         private fun createCalendarEvents() {
+
+             val habitviewModel: HabitListViewModel by viewModels {
+                val db = (activity?.application as HabyteApplication).db
+                HabitListViewModelFactory(db.habitDao(), db.habyteDao())
+            }
+
+            val data = runBlocking { habitviewModel.getHabitsOfHabyte(habyteID.toInt()); }
+
+            data.forEach { i ->
+                val cal: Calendar = Calendar.getInstance()
+                val intent = Intent(Intent.ACTION_EDIT)
+                intent.type = "vnd.android.cursor.item/event"
+                intent.putExtra("beginTime", i.start)
+                intent.putExtra("time", true)
+                intent.putExtra("rule", "FREQ=YEARLY")
+                intent.putExtra("endTime", i.start.plusHours(1))
+                intent.putExtra("title", binding.habitName.toString())
+                startActivity(intent)
+            }
+        }
+
+        private fun requestCalendarPermission() {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this as Activity,
+                    Manifest.permission.WRITE_CALENDAR
+                )
+            ) {
+                AlertDialog.Builder(this)
+                    .setTitle("Permission needed")
+                    .setMessage("This permission is needed to create calendar events")
+                    .setPositiveButton("ok",
+                        DialogInterface.OnClickListener { dialog, which ->
+
+                            ActivityCompat.requestPermissions(
+                                this as MainActivity, arrayOf(
+                                    Manifest.permission.WRITE_CALENDAR
+                                ), CALLENDAR_PERMISSION_CODE
+                            )
+                        })
+                    .setNegativeButton("cancel",
+                        DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() })
+                    .create().show()
+            } else {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.WRITE_CALENDAR),
+                    CALLENDAR_PERMISSION_CODE
+                )
+            }
+        }
+
+        override fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<String?>,
+            grantResults: IntArray
+        ) {
+            if (requestCode == CALLENDAR_PERMISSION_CODE) {
+                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    createCalendarEvents()
                 }
             }
-
-            if (!permissionStatus) {
-
-            }
-/*
-            if (permissionStatus){
-                val cr: ContentResolver = ctx.getContentResolver()
-                val values = ContentValues()
-
-                values.put(CalendarContract.Events.DTSTART, dtstart)
-                values.put(CalendarContract.Events.TITLE, habyteId)
-                values.put(CalendarContract.Events.DESCRIPTION, comment)
-
-                val timeZone: TimeZone = TimeZone.getDefault()
-                values.put(CalendarContract.Events.EVENT_TIMEZONE, timeZone.getID())
-
-// Default calendar
-
-// Default calendar
-                values.put(CalendarContract.Events.CALENDAR_ID, 1)
-
-                values.put(
-                    CalendarContract.Events.RRULE, "FREQ=DAILY;UNTIL="
-                            + dtUntill
-                )
-// Set Period for 1 Hour
-// Set Period for 1 Hour
-                values.put(CalendarContract.Events.DURATION, "+P1H")
-
-                values.put(CalendarContract.Events.HAS_ALARM, 1)
-
-// Insert event to calendar
-
-// Insert event to calendar
-                val uri: Uri? = cr.insert(CalendarContract.Events.CONTENT_URI, values)
-            }
         }
-
-*/
-        }
-        binding.deleteButton.setOnClickListener {
-            viewModel.deleteHabyte()
-            findNavController().navigateUp()
-        }
-
-        binding.editButton.setOnClickListener {
-            val int = Intent(requireContext(), AddOrUpdateHabyteActivity::class.java)
-            int.putExtra("habyteId", habyteId.toInt())
-            startActivity(int)
-        }
-
     }
-}
