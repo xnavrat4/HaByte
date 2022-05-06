@@ -11,6 +11,7 @@ import fi.muni.android.habyte.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
+    var CALENDAR_PERMISSION = 1;
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

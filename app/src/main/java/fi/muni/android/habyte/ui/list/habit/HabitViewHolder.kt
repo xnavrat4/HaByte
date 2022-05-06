@@ -14,4 +14,14 @@ class HabitViewHolder(private val binding: FragmentHabitListItemBinding)
                 onDoneClick(listItem)
             }
         }
+
+        fun bind1(listItem: Habit, onExpandClick: (Habit) -> Unit) {
+            binding.habitName.text = listItem.name
+            binding.timeLabel.text = listItem.start.toString()
+            binding.expandableButton.setOnClickListener {
+                onExpandClick(listItem);
+            }
+        }
+
+
 }

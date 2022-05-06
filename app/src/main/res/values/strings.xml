@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Habyte</string>
+    <string name="app_name">Habyte Manager</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_habite_page">Today</string>
