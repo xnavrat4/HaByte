@@ -16,12 +16,16 @@
     </style>
     
     <style name="InputTextOutlinedStyle" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="android:layout_marginTop">10dp</item>
         <item name="shapeAppearance">@style/ShapeAppearance.App.SmallComponent</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
         <item name="android:paddingStart">20dp</item>
         <item name="android:paddingEnd">20dp</item>
+    </style>
+
+    <style name="InputTextOutlinedStyle.WithError" parent="InputTextOutlinedStyle">
+        <item name="android:paddingBottom">0dp</item>
+        <item name="errorEnabled">true</item>
     </style>
 
     <style name="ThemeOverlay.Habyte.FullscreenContainer" parent="">
