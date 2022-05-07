@@ -17,6 +17,7 @@ import fi.muni.android.habyte.receiver.NotificationReceiver
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.io.File
 import java.time.LocalDate
 
 object NotificationHelper {
@@ -51,35 +52,55 @@ object NotificationHelper {
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-//        alarmManager.setRepeating(
-//            AlarmManager.RTC_WAKEUP,
-//            calendar.timeInMillis,
-//            AlarmManager.INTERVAL_DAY,
-//            dailyPendingIntent
-//        )
-
-        alarmManager.setExactAndAllowWhileIdle(
+        alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY,
             dailyPendingIntent
         )
     }
 
     fun scheduleNotificationsForToday(context: Context) = runBlocking {
-        Toast.makeText(context, "I'm creating notifications", Toast.LENGTH_SHORT).show();
+        val savedIntentsFileName = "notifIntents"
+        val savedIntentsFile = File(context.filesDir, savedIntentsFileName)
+        val savedIds = savedIntentsFile.readText()
 
         launch {
             try {
                 val habits = HabyteRoomDatabase.getDatabase(context).habitDao().findHabitsOnDate(
                     LocalDate.now(), false).first()
-                for (habit in habits) {
-                    println(habit.name)
-                    scheduleAlarmForHabit(context, habit)
+
+                if (savedIds != habits.map { h -> h.id }.toString()) {
+                    Toast.makeText(context, "Creating notifications for today", Toast.LENGTH_SHORT).show()
+                    for (habit in habits) {
+                        println(habit.name)
+                        scheduleAlarmForHabit(context, habit)
+                    }
+                    savedIntentsFile.writeText(habits.map { h -> h.id }.toString())
                 }
             } catch (e: NoSuchElementException) {
                 Toast.makeText(context, "Error retrieving data from database",
                     Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    fun updateNotificationsSchedulesForToday(
+        context: Context,
+        habitsToSchedule: List<Habit>,
+        habitsToUnschedule: List<Int>?)
+    {
+        Toast.makeText(context, "Updating notifications", Toast.LENGTH_SHORT).show()
+
+        if (habitsToUnschedule != null) {
+            for (habitId in habitsToUnschedule) {
+                println(habitId)
+                cancelAlarm(context, habitId)
+            }
+        }
+
+        for (habit in habitsToSchedule) {
+            scheduleAlarmForHabit(context, habit)
         }
     }
 
@@ -125,5 +146,14 @@ object NotificationHelper {
             calendar.timeInMillis,
             pendingIntent
         )
+    }
+
+    private fun cancelAlarm(context: Context, id: Int) {
+        val alarmIntent = Intent(context, NotificationReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(context, id, alarmIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE)
+
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.cancel(pendingIntent)
     }
 }
