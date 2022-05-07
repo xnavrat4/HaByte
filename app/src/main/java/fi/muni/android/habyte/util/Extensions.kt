@@ -9,3 +9,4 @@ fun LocalDate.daysUntil(endDate: LocalDate) : Int {
 fun Int.progressAsString(total: Int) : String {
     return "$this/$total"
 }
+

@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="fi.muni.android.habyte">
 
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <application
         android:name=".HabyteApplication"
         android:allowBackup="true"
@@ -10,6 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Habyte">
+        <receiver android:name=".receiver.NotificationReceiver" android:enabled="true"/>
+        <receiver android:name=".receiver.NotificationCreatorReceiver" android:enabled="true"/>
         <activity
             android:name=".CreateHabyteActivity"
             android:exported="false"
