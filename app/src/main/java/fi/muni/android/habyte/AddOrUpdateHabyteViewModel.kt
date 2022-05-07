@@ -1,10 +1,13 @@
 package fi.muni.android.habyte
 
 import androidx.lifecycle.*
+import ca.antonious.materialdaypicker.MaterialDayPicker
 import fi.muni.android.habyte.database.dao.HabitDao
 import fi.muni.android.habyte.database.dao.HabyteDao
 import fi.muni.android.habyte.model.Habit
 import fi.muni.android.habyte.model.Habyte
+import fi.muni.android.habyte.util.daysToWeekday
+import fi.muni.android.habyte.util.toMDPW
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -33,35 +36,29 @@ class AddOrUpdateHabyteViewModel(
     fun createHabyte(
         title: String,
         description: String,
-        startTime: String,
-        recurrenceString: String,
-        endDate: String
+        startTime: LocalTime,
+        endDate: LocalDate,
+        selectedDays: Set<MaterialDayPicker.Weekday>
     ) {
         viewModelScope.launch {
             try {
-                val endDateLD: LocalDate = LocalDate.parse(
-                    endDate,
-                    DateTimeFormatter.ofPattern("dd/MM/yyyy")
-                )
-                val startLocalTime = LocalTime.parse(startTime, DateTimeFormatter.ISO_LOCAL_TIME)
                 val habyte = Habyte(
                     id = 0,
                     name = title,
                     description = description,
                     startDate = LocalDate.now(),
-                    endDate = endDateLD,
+                    endDate = endDate,
                     habitsFinished = 0,
-                    habitsToDo = 0
+                    habitsToDo = 0,
+                    selectedDays = selectedDays,
+                    selectedTime = startTime
                 )
 
                 val newHabyteId = habyteDao.insertHabyte(habyte).toInt()
 
                 //Create Habits
-                val habitsTodo: Int = when (recurrenceString) {
-                    "Daily" -> createHabitsDaily(newHabyteId, habyte, startLocalTime, endDateLD)
-                    "Weekly" -> createHabitsWeekly(newHabyteId, habyte, endDateLD)
-                    else -> 0
-                }
+                val habitsTodo: Int =
+                    createHabits(newHabyteId, habyte, startTime, endDate, selectedDays)
 
                 // Update value for the habyte
                 val updatedHabyte = habyte.copy(id = newHabyteId, habitsToDo = habitsTodo)
@@ -81,9 +78,9 @@ class AddOrUpdateHabyteViewModel(
     fun updateHabyte(
         title: String,
         description: String,
-        startTime: String,
-        recurrenceString: String,
-        endDate: String
+        startTime: LocalTime,
+        endDate: LocalDate,
+        selectedDays: Set<MaterialDayPicker.Weekday>
     ) {
         viewModelScope.launch {
             if (!supportsUpdate()) {
@@ -92,45 +89,43 @@ class AddOrUpdateHabyteViewModel(
                 return@launch
             }
             try {
-                val endDateLD: LocalDate = LocalDate.parse(
-                    endDate,
-                    DateTimeFormatter.ofPattern("dd/MM/yyyy")
-                )
-                val startLocalTime = LocalTime.parse(startTime, DateTimeFormatter.ISO_LOCAL_TIME)
-
                 val oldHabyte = habyteDao.suspendFindHabyte(habyteId)
 
                 val allHabits = habitDao.findHabitsByHabyte(habyteId)
 
                 var lastDoneHabitIdx = 0
-                for (habit in allHabits) {
-                    // delete undone habits older than today
-                    if (habit.start.toLocalDate() >= LocalDate.now() && !habit.done) {
-                        habitDao.deleteHabit(habit)
-                    } else {
-                        lastDoneHabitIdx++
-                    }
-                }
 
-                // recreate habits according to new specifications
-                val habitsTodo: Int = when (recurrenceString) {
-                    "Daily" -> createHabitsDaily(
+                var habitsTodo: Int = oldHabyte.habitsToDo
+                if (selectedDays != oldHabyte.selectedDays) {
+
+                    for (habit in allHabits) {
+                        // delete undone habits older than today
+                        if (habit.start.toLocalDate() >= LocalDate.now() && !habit.done) {
+                            habitDao.deleteHabit(habit)
+                        } else {
+                            lastDoneHabitIdx++
+                        }
+                    }
+
+                    // recreate habits according to new specifications
+                    habitsTodo = createHabits(
                         habyteId,
                         oldHabyte,
-                        startLocalTime,
-                        endDateLD,
+                        startTime,
+                        endDate,
+                        selectedDays,
                         lastDoneHabitIdx
                     )
-                    "Weekly" -> createHabitsWeekly(habyteId, oldHabyte, endDateLD)
-                    else -> 0
                 }
 
                 // Update value for the habit
                 val updatedHabyte = oldHabyte.copy(
                     name = title,
                     description = description,
-                    endDate = endDateLD,
-                    habitsToDo = habitsTodo
+                    endDate = endDate,
+                    habitsToDo = habitsTodo,
+                    selectedDays = selectedDays,
+                    selectedTime = startTime
                 )
                 habyteDao.updateHabyte(updatedHabyte)
                 _queryResult.value = Result.success(Unit)
@@ -141,25 +136,24 @@ class AddOrUpdateHabyteViewModel(
         }
     }
 
-    private fun createHabitsWeekly(id: Int, habyte: Habyte, endDate: LocalDate): Int {
-        TODO("Not yet implemented")
-    }
-
-    private suspend fun createHabitsDaily(
+    private suspend fun createHabits(
         id: Int,
         habyte: Habyte,
         startTime: LocalTime,
         endDate: LocalDate,
+        selectedDays: Set<MaterialDayPicker.Weekday>,
         counter: Int = 0
     ): Int {
-
+        // SET TO NEXT DAY IF TODAY + START TIME IS IN THE PAST
         var time = if (startTime > LocalTime.now()) {
             LocalDateTime.of(LocalDate.now(), startTime)
         } else {
             LocalDateTime.of(LocalDate.now().plusDays(1), startTime)
         }
 
+        time = adjustFirstDate(time, selectedDays)
         val endDateTime = endDate.atTime(23, 59, 59)
+
         if (time > endDateTime) {
             throw java.lang.IllegalArgumentException("THIS SHOULD BE VALIDATED")
         }
@@ -176,16 +170,39 @@ class AddOrUpdateHabyteViewModel(
                 id
             )
             habitDao.insertHabit(habit)
+
+            val nextDay = getNearestDay(time, selectedDays)
             x++
-            time = time.plusDays(1)
+            time = time.plusDays(time.dayOfWeek.toMDPW().daysToWeekday(nextDay))
         }
 
         return x
     }
 
+    private fun adjustFirstDate(
+        time: LocalDateTime,
+        selectedDays: Set<MaterialDayPicker.Weekday>
+    ): LocalDateTime {
+        val dow = time.dayOfWeek.toMDPW()
+        if (!selectedDays.contains(dow)) {
+            return time.plusDays(dow.daysToWeekday(getNearestDay(time, selectedDays)))
+        }
+        return time
+    }
 
-    private fun createHabitsHourly(id: Long, habyte: Habyte, endDate: LocalDate): Int {
-        TODO("Not yet implemented")
+    private fun getNearestDay(
+        time: LocalDateTime,
+        selectedDays: Set<MaterialDayPicker.Weekday>
+    ): MaterialDayPicker.Weekday {
+        var nearestDay = selectedDays.stream().findFirst().get()
+        val dow = time.dayOfWeek.toMDPW()
+
+        for (selectedDay in selectedDays) {
+            if (dow.daysToWeekday(selectedDay) < dow.daysToWeekday(nearestDay)) {
+                nearestDay = selectedDay
+            }
+        }
+        return nearestDay
     }
 
 }

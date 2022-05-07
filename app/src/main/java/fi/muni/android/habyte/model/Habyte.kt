@@ -4,8 +4,10 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import ca.antonious.materialdaypicker.MaterialDayPicker
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
+import java.time.LocalTime
 import java.util.*
 
 @Entity(tableName = "habyte")
@@ -31,5 +33,11 @@ data class Habyte(
     val habitsFinished: Int,
 
     @ColumnInfo(name = "habitsToDo")
-    val habitsToDo: Int
+    val habitsToDo: Int,
+
+    @ColumnInfo(name = "currentlyPickedDays")
+    val selectedDays: Set<MaterialDayPicker.Weekday>,
+
+    @ColumnInfo(name = "selectedTime")
+    val selectedTime: LocalTime
 ) : Parcelable
