@@ -37,7 +37,7 @@ object NotificationHelper {
         }
     }
 
-    // sets up alarm for every midnight, then calls scheduleNotificationsForToday
+    // sets up an alarm for every midnight, then calls scheduleNotificationsForToday
     fun setupDailyNotificationCreation(context: Context) {
         val dailyIntent = Intent(context, NotificationCreatorReceiver::class.java)
 
@@ -60,8 +60,7 @@ object NotificationHelper {
         )
     }
 
-    // schedules alarms for notifications for today
-    // is called every midnight
+    // schedules notifications for today
     fun scheduleNotificationsForToday(context: Context) = runBlocking {
         val intentPref = context.getSharedPreferences(
             context.getString(R.string.latest_intents_update_date), Context.MODE_PRIVATE)

@@ -14,4 +14,10 @@
     <color name="black_overlay">#66000000</color>
     <color tools:override="true" name="dayPressed">#FF3700B3</color>
     <color tools:override="true" name="daySelected">#FF6200EE</color>
+
+    <color name="background">#2C2C34</color>
+    <color name="item_background">#494850</color>
+    <color name="magic_mint">#A4F9C8</color>
+    <color name="mint_green">#A4F95F</color>
+    <color name="beige">#EEF5DB</color>
 </resources>

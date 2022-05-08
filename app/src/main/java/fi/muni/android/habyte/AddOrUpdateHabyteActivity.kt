@@ -19,6 +19,7 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import fi.muni.android.habyte.database.typeconverters.Converters
 import fi.muni.android.habyte.databinding.ActivityAddOrUpdateHabyteBinding
+import fi.muni.android.habyte.util.NotificationHelper
 import fi.muni.android.habyte.util.toDOW
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -139,6 +140,7 @@ class AddOrUpdateHabyteActivity : AppCompatActivity() {
             } else {
                 viewModel.createHabyte(title, description, startLocalTime, endDateLD, selectedDays)
             }
+            NotificationHelper.scheduleNotificationsForToday(this)
         }
 
         viewModel.queryResult.observe(this) { result ->

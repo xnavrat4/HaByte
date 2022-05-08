@@ -72,8 +72,18 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.Habyte.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.Habyte.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorPrimary">@color/background</item>
+        <item name="colorPrimaryDark">@color/background</item>
+        <item name="colorAccent">@color/beige</item>
+    </style>
 
     <style name="Theme.Habyte.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="ItemCard" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">12dp</item>
+        <item name="strokeColor">@color/beige</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
     
 </resources>
