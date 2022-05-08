@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 object NotificationHelper {
 
@@ -105,7 +106,7 @@ object NotificationHelper {
             }
         }
 
-        for (habit in habitsToSchedule) {
+        for (habit in habitsToSchedule.filter { it.start >= LocalDateTime.now() }) {
             scheduleAlarmForHabit(context, habit)
         }
     }
@@ -159,7 +160,9 @@ object NotificationHelper {
         val pendingIntent = PendingIntent.getBroadcast(context, id, alarmIntent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE)
 
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.cancel(pendingIntent)
+        if (pendingIntent != null) {
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmManager.cancel(pendingIntent)
+        }
     }
 }
