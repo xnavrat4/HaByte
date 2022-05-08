@@ -11,9 +11,9 @@ import fi.muni.android.habyte.database.typeconverters.Converters
 import fi.muni.android.habyte.model.Habit
 import fi.muni.android.habyte.model.Habyte
 
-@Database(entities = [Habyte::class, Habit::class], version = 1)
+@Database(entities = [Habyte::class, Habit::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
-public abstract class HabyteRoomDatabase: RoomDatabase() {
+abstract class HabyteRoomDatabase: RoomDatabase() {
 
     abstract fun habyteDao(): HabyteDao
 

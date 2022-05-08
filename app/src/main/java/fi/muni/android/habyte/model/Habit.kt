@@ -1,11 +1,8 @@
 package fi.muni.android.habyte.model
 
 import android.os.Parcelable
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
+import androidx.room.*
 import androidx.room.ForeignKey.CASCADE
-import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDateTime
 import java.util.*
@@ -17,7 +14,8 @@ import java.util.*
         parentColumns = ["id"],
         childColumns = ["habyteId"],
         onDelete = CASCADE
-    )]
+    )],
+    indices = [Index(value = ["habyteId"])]
 )
 @Parcelize
 data class Habit(

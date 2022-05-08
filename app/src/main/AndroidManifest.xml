@@ -3,6 +3,8 @@
     package="fi.muni.android.habyte">
 
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+
     <application
         android:name=".HabyteApplication"
         android:allowBackup="true"
@@ -10,22 +12,19 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Habyte">
+        android:theme="@style/Theme.Habyte.NoActionBar">
         <receiver android:name=".receiver.NotificationReceiver" android:enabled="true"/>
         <receiver android:name=".receiver.NotificationCreatorReceiver" android:enabled="true"/>
         <activity
-            android:name=".CreateHabyteActivity"
+            android:name=".AddOrUpdateHabyteActivity"
             android:exported="false"
-            android:label="@string/title_activity_create_habyte"
-            android:theme="@style/Theme.Habyte.NoActionBar"
-            />
+            android:label="Add Habyte"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/title_activity_main">
+            android:label="Habyte Manager">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

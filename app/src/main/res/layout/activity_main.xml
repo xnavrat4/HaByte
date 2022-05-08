@@ -3,8 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="?attr/actionBarSize">
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.Habyte.AppBarOverlay">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/Theme.Habyte.PopupOverlay" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <fragment
         android:id="@+id/nav_host_fragment_activity_main"
@@ -12,17 +24,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="?attr/actionBarSize"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         app:defaultNavHost="true"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         app:navGraph="@navigation/mobile_navigation" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/create_habyte_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_anchor="@id/bottom_nav_bar"
+        android:contentDescription="@string/add_habyte"
         android:src="@drawable/ic_main_habyte_add_24"
-        android:contentDescription="@string/add_habyte" />
+        app:layout_anchor="@id/bottom_nav_bar" />
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottom_nav_bar"
@@ -31,14 +43,15 @@
         android:layout_gravity="bottom"
         app:fabCradleMargin="10dp"
         app:fabCradleRoundedCornerRadius="10dp">
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/nav_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/transparent"
             android:layout_marginEnd="16dp"
-            android:splitMotionEvents="false"
+            android:background="@android:color/transparent"
             android:outlineSpotShadowColor="@android:color/transparent"
+            android:splitMotionEvents="false"
             app:menu="@menu/bottom_nav_menu" />
     </com.google.android.material.bottomappbar.BottomAppBar>
 
