@@ -9,19 +9,10 @@ class HabitViewHolder(private val binding: FragmentHabitListItemBinding)
 
         fun bind(listItem: Habit, onDoneClick: (Habit) -> Unit) {
             binding.habitName.text = listItem.name
-            binding.timeLabel.text = listItem.start.toString()
+            binding.timeLabel.text = "${listItem.start.hour}:${listItem.start.minute}"
+
             binding.doneButton.setOnClickListener {
                 onDoneClick(listItem)
             }
         }
-
-        fun bind1(listItem: Habit, onExpandClick: (Habit) -> Unit) {
-            binding.habitName.text = listItem.name
-            binding.timeLabel.text = listItem.start.toString()
-            binding.expandableButton.setOnClickListener {
-                onExpandClick(listItem);
-            }
-        }
-
-
 }
