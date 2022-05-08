@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 object NotificationHelper {
 
@@ -60,8 +59,7 @@ object NotificationHelper {
         )
     }
 
-    // schedules alarms for notifications for today
-    // is called every midnight
+    // schedules notifications for today
     fun scheduleNotificationsForToday(context: Context) = runBlocking {
         val intentPref = context.getSharedPreferences(
             context.getString(R.string.latest_intents_update_date), Context.MODE_PRIVATE)
@@ -69,45 +67,42 @@ object NotificationHelper {
         launch {
             try {
                 val habitsForToday = HabyteRoomDatabase.getDatabase(context).habitDao()
-                    .findHabitsOnDate(LocalDate.now(), false).first()
+                    .findHabitsOnDate(LocalDate.now(), false)
+                    .first()
+
+                // get ids of intents scheduled for today
+                val scheduledString = intentPref.getString(context.getString(R.string.saved_intents), "")!!
+
+                // habits for today did not change
+                if (scheduledString == habitsForToday.toIdsString()) {
+                    return@launch
+                }
+
+                if (scheduledString.isNotEmpty()) {
+                    // cancel all scheduled intends
+                    val scheduledIntentIds = scheduledString.split(",").map { s -> s.toInt() }
+                    scheduledIntentIds
+                        .map { cancelAlarm(context, it) }
+                }
 
                 for (habit in habitsForToday) {
                     scheduleAlarmForHabit(context, habit)
                 }
 
                 with(intentPref.edit()) {
-                    val toSave = habitsForToday.toIdsString()
-                    putString(context.getString(R.string.saved_intents), toSave)
+                    putString(context.getString(R.string.saved_intents), habitsForToday.toIdsString())
                     putString(
                         context.getString(R.string.latest_intents_update_date),
                         LocalDate.now().toString()
                     )
                     apply()
                 }
+
+                Toast.makeText(context, "Notifications updated", Toast.LENGTH_SHORT).show()
             } catch (e: NoSuchElementException) {
                 Toast.makeText(context, "Error retrieving data from database",
                     Toast.LENGTH_SHORT).show();
             }
-        }
-    }
-
-    // updates today's notification
-    // is called when habits for today are changed (click on done, habyte deleted/created/updated)
-    fun updateNotificationsSchedulesForToday(
-        context: Context,
-        habitsToSchedule: List<Habit>,
-        habitsToUnschedule: List<Int>?)
-    {
-        Toast.makeText(context, "Updating notifications", Toast.LENGTH_SHORT).show()
-
-        if (habitsToUnschedule != null) {
-            for (habitId in habitsToUnschedule) {
-                cancelAlarm(context, habitId)
-            }
-        }
-
-        for (habit in habitsToSchedule.filter { it.start >= LocalDateTime.now() }) {
-            scheduleAlarmForHabit(context, habit)
         }
     }
 

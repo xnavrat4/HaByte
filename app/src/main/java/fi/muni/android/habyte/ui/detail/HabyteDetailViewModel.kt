@@ -26,7 +26,6 @@ class HabyteDetailViewModel (
             habyteDao.deleteHabyte(toDelete)
         }
     }
-
 }
 
 class HabyteDetailViewModelFactory(

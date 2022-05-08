@@ -1,7 +1,5 @@
 package fi.muni.android.habyte.ui.list.habit
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,12 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import fi.muni.android.habyte.HabyteApplication
-import fi.muni.android.habyte.R
 import fi.muni.android.habyte.databinding.FragmentHabitListBinding
-import fi.muni.android.habyte.model.Habit
 import fi.muni.android.habyte.util.NotificationHelper
-import fi.muni.android.habyte.util.toIdsString
-import java.time.LocalDate
 
 
 class HabitList : Fragment() {
@@ -43,44 +37,9 @@ class HabitList : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
 
-        val intentPref = requireContext().getSharedPreferences(
-            getString(R.string.latest_intents_update_date), Context.MODE_PRIVATE)
-
         viewModel.getHabitsForToday().observe(viewLifecycleOwner) {
             adapter.submitList(it)
-
-            // check if there was some change in habits scheduled for today
-            val savedIntentIds = intentPref.getString(getString(R.string.saved_intents), "")!!
-            if (it.toIdsString() != savedIntentIds) {
-                updateIntents(
-                    intentPref = intentPref,
-                    updatedHabits = it,
-                    savedIntentIds = savedIntentIds)
-            }
-        }
-    }
-
-    private fun updateIntents(intentPref: SharedPreferences, updatedHabits: List<Habit>, savedIntentIds: String) {
-        var toUnschedule: List<Int>? = null
-
-        if (savedIntentIds.isNotEmpty()) {
-            toUnschedule = savedIntentIds.split(",").map { s -> s.toInt() }
-        }
-
-        NotificationHelper.updateNotificationsSchedulesForToday(
-            context = requireContext(),
-            habitsToSchedule = updatedHabits,
-            habitsToUnschedule = toUnschedule
-        )
-
-        with(intentPref.edit()) {
-            val toSave = updatedHabits.toIdsString()
-            putString(getString(R.string.saved_intents), toSave)
-            putString(
-                getString(R.string.latest_intents_update_date),
-                LocalDate.now().toString()
-            )
-            apply()
+            NotificationHelper.scheduleNotificationsForToday(requireContext())
         }
     }
 }
