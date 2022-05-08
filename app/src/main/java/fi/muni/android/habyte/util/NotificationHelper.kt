@@ -22,11 +22,10 @@ import java.time.LocalDateTime
 
 object NotificationHelper {
 
-    private const val channelId = "HabyteChannel"
-
     fun createNotificationChannel(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = context.getString(R.string.notification_channel)
+            val channelId = context.getString(R.string.notification_channel)
+            val name = "Habyte Channel"
             val descriptionText = "Habyte notification channel"
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(channelId, name, importance).apply {
@@ -38,6 +37,7 @@ object NotificationHelper {
         }
     }
 
+    // sets up alarm for every midnight, then calls scheduleNotificationsForToday
     fun setupDailyNotificationCreation(context: Context) {
         val dailyIntent = Intent(context, NotificationCreatorReceiver::class.java)
 
@@ -120,6 +120,7 @@ object NotificationHelper {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         }
 
+        val channelId = context.getString(R.string.notification_channel)
         val builder = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.h_box)
             .setContentTitle("Habyte: $habitName")

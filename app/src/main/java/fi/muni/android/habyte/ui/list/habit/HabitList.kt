@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,6 +49,7 @@ class HabitList : Fragment() {
         viewModel.getHabitsForToday().observe(viewLifecycleOwner) {
             adapter.submitList(it)
 
+            // check if there was some change in habits scheduled for today
             val savedIntentIds = intentPref.getString(getString(R.string.saved_intents), "")!!
             if (it.toIdsString() != savedIntentIds) {
                 updateIntents(
@@ -61,7 +61,6 @@ class HabitList : Fragment() {
     }
 
     private fun updateIntents(intentPref: SharedPreferences, updatedHabits: List<Habit>, savedIntentIds: String) {
-
         var toUnschedule: List<Int>? = null
 
         if (savedIntentIds.isNotEmpty()) {
