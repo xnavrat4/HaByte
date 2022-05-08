@@ -17,4 +17,7 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
     <string name="notification_channel">HabyteChannel</string>
+    <string name="intent_preferences">intentsPref</string>
+    <string name="saved_intents">intents</string>
+    <string name="latest_intents_update_date">date</string>
 </resources>

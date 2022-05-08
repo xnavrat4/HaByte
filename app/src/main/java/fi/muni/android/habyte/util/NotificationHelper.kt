@@ -17,7 +17,6 @@ import fi.muni.android.habyte.receiver.NotificationReceiver
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.io.File
 import java.time.LocalDate
 
 object NotificationHelper {
@@ -26,8 +25,8 @@ object NotificationHelper {
 
     fun createNotificationChannel(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "HabyteChannel"
-            val descriptionText = "description for our channel"
+            val name = context.getString(R.string.notification_channel)
+            val descriptionText = "Habyte notification channel"
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(channelId, name, importance).apply {
                 description = descriptionText
@@ -60,23 +59,29 @@ object NotificationHelper {
         )
     }
 
+    // schedules alarms for notifications for today
+    // is called every midnight
     fun scheduleNotificationsForToday(context: Context) = runBlocking {
-        val savedIntentsFileName = "notifIntents"
-        val savedIntentsFile = File(context.filesDir, savedIntentsFileName)
-        val savedIds = savedIntentsFile.readText()
+        val intentPref = context.getSharedPreferences(
+            context.getString(R.string.latest_intents_update_date), Context.MODE_PRIVATE)
 
         launch {
             try {
-                val habits = HabyteRoomDatabase.getDatabase(context).habitDao().findHabitsOnDate(
-                    LocalDate.now(), false).first()
+                val habitsForToday = HabyteRoomDatabase.getDatabase(context).habitDao()
+                    .findHabitsOnDate(LocalDate.now(), false).first()
 
-                if (savedIds != habits.map { h -> h.id }.toString()) {
-                    Toast.makeText(context, "Creating notifications for today", Toast.LENGTH_SHORT).show()
-                    for (habit in habits) {
-                        println(habit.name)
-                        scheduleAlarmForHabit(context, habit)
-                    }
-                    savedIntentsFile.writeText(habits.map { h -> h.id }.toString())
+                for (habit in habitsForToday) {
+                    scheduleAlarmForHabit(context, habit)
+                }
+
+                with(intentPref.edit()) {
+                    val toSave = habitsForToday.toIdsString()
+                    putString(context.getString(R.string.saved_intents), toSave)
+                    putString(
+                        context.getString(R.string.latest_intents_update_date),
+                        LocalDate.now().toString()
+                    )
+                    apply()
                 }
             } catch (e: NoSuchElementException) {
                 Toast.makeText(context, "Error retrieving data from database",
@@ -85,6 +90,8 @@ object NotificationHelper {
         }
     }
 
+    // updates today's notification
+    // is called when habits for today are changed (click on done, habyte deleted/created/updated)
     fun updateNotificationsSchedulesForToday(
         context: Context,
         habitsToSchedule: List<Habit>,
@@ -94,7 +101,6 @@ object NotificationHelper {
 
         if (habitsToUnschedule != null) {
             for (habitId in habitsToUnschedule) {
-                println(habitId)
                 cancelAlarm(context, habitId)
             }
         }
