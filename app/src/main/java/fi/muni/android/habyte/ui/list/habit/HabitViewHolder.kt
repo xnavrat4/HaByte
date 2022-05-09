@@ -4,6 +4,7 @@ import android.graphics.Color
 import androidx.recyclerview.widget.RecyclerView
 import fi.muni.android.habyte.databinding.FragmentHabitListItemBinding
 import fi.muni.android.habyte.model.Habit
+import kotlinx.coroutines.newFixedThreadPoolContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -15,9 +16,9 @@ class HabitViewHolder(private val binding: FragmentHabitListItemBinding)
             binding.habitName.text = listItem.name
             binding.timeLabel.text =  listItem.start.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n" +listItem.start.format(DateTimeFormatter.ofPattern("HH:mm"))
             if (listItem.start.dayOfMonth < LocalDate.now().dayOfMonth && !listItem.done){
-                binding.cardContainer.setBackgroundColor(Color.parseColor("#FF0000"))
+                binding.cardContainer.strokeColor = (Color.parseColor("#ff0000"))
             }else if (listItem.start.dayOfMonth < LocalDate.now().dayOfMonth && listItem.done){
-                binding.cardContainer.setBackgroundColor(Color.parseColor("#008000"))
+                binding.cardContainer.strokeColor = Color.parseColor("#008000")
             }
             binding.timeLabel.text = "${listItem.start.hour}:${listItem.start.minute}"
 
