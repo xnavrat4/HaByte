@@ -17,17 +17,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import fi.muni.android.habyte.AddOrUpdateHabyteActivity
 import fi.muni.android.habyte.HabyteApplication
 import fi.muni.android.habyte.MainActivity
+import fi.muni.android.habyte.databinding.FragmentHabitListBinding
 import fi.muni.android.habyte.databinding.FragmentHabyteDetailBinding
+import fi.muni.android.habyte.model.Habit
+import fi.muni.android.habyte.ui.list.habit.HabitAdapter
 import fi.muni.android.habyte.ui.list.habit.HabitListViewModel
 import fi.muni.android.habyte.ui.list.habit.HabitListViewModelFactory
 import fi.muni.android.habyte.util.NotificationHelper
 import fi.muni.android.habyte.util.progressAsString
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import java.time.LocalDateTime
 
 
 class HabyteDetailFragment : Fragment() {
@@ -36,7 +39,9 @@ class HabyteDetailFragment : Fragment() {
 
     private lateinit var viewModel: HabyteDetailViewModel
 
-    val CALLENDAR_PERMISSION_CODE = 0
+    private lateinit var habitViewModel: HabitListViewModel
+
+    var CALLENDAR_PERMISSION_CODE = 0
 
     var habyteID = "";
 
@@ -73,6 +78,8 @@ class HabyteDetailFragment : Fragment() {
             }
         }
 
+
+
         binding.exportButton.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
                     context as Activity,
@@ -95,8 +102,24 @@ class HabyteDetailFragment : Fragment() {
             int.putExtra("habyteId", habyteId.toInt())
             startActivity(int)
         }
-    }
 
+
+
+        binding.calendar.setOnDateChangeListener { calendarView, year, month, day ->
+            val db = (activity?.application as HabyteApplication).db
+            this.habitViewModel = ViewModelProvider(this,
+                HabitListViewModelFactory(db.habitDao(), db.habyteDao(), habyteID.toInt(), LocalDateTime.of(year,month+1, day,0,0)))
+                .get(HabitListViewModel::class.java)
+            val adapter = HabitAdapter(habitViewModel::confirmHabit)
+            binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+            binding.recyclerView.adapter = adapter
+
+            habitViewModel.getHabitesForDay().observe(viewLifecycleOwner) {
+                adapter.submitList(it)
+            }
+
+        }
+    }
          private fun createCalendarEvents() {
 
              val habitviewModel: HabitListViewModel by viewModels {
