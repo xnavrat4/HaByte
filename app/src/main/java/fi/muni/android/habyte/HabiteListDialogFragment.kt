@@ -35,7 +35,6 @@ class HabiteListDialogFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentItemListDialogListDialogBinding.inflate(inflater, container, false)
         return binding.root
 

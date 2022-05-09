@@ -4,7 +4,7 @@
     <item
         android:id="@+id/habit_list_fragment"
         android:icon="@drawable/ic_home_black_24dp"
-        android:title="habitelist" />
+        android:title="@string/habit_list_title" />
 
     <item
         android:id="@+id/placeholder"
@@ -13,7 +13,7 @@
     <item
         android:id="@+id/habyte_list_fragment"
         android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="habytelist" />
+        android:title="@string/habyte_list_title" />
 
 
 </menu>

@@ -117,8 +117,10 @@ class AddOrUpdateHabyteActivity : AppCompatActivity() {
         }
 
         if (viewModel.supportsUpdate()) {
+            supportActionBar?.title = getString(R.string.update_habyte_page_title)
             binding.submitHabyteButton.text = getString(R.string.update_habyte_button_title)
         } else {
+            supportActionBar?.title = getString(R.string.create_habyte_page_title)
             binding.submitHabyteButton.text = getString(R.string.add_habyte_button_title)
         }
 
