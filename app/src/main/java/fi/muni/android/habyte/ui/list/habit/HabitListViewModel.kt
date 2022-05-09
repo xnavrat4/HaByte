@@ -28,7 +28,6 @@ class HabitListViewModel(private val dao: HabitDao, private val habyteDao: Habyt
             habyteDao.updateHabyte(habyteToUpdate.copy(habitsFinished = habyteToUpdate.habitsFinished+1))
         }
     }
-
 }
 
 class HabitListViewModelFactory(private val dao: HabitDao, private val habyteDao: HabyteDao) : ViewModelProvider.Factory {

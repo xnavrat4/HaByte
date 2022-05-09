@@ -23,7 +23,10 @@ import fi.muni.android.habyte.MainActivity
 import fi.muni.android.habyte.databinding.FragmentHabyteDetailBinding
 import fi.muni.android.habyte.ui.list.habit.HabitListViewModel
 import fi.muni.android.habyte.ui.list.habit.HabitListViewModelFactory
+import fi.muni.android.habyte.util.NotificationHelper
 import fi.muni.android.habyte.util.progressAsString
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
 
@@ -81,18 +84,18 @@ class HabyteDetailFragment : Fragment() {
                 requestCalendarPermission();
             }
         }
-            binding.deleteButton.setOnClickListener {
-                viewModel.deleteHabyte()
-                findNavController().navigateUp()
-            }
-
-            binding.editButton.setOnClickListener {
-                val int = Intent(requireContext(), AddOrUpdateHabyteActivity::class.java)
-                int.putExtra("habyteId", habyteId.toInt())
-                startActivity(int)
-            }
-
+        binding.deleteButton.setOnClickListener {
+            viewModel.deleteHabyte()
+            NotificationHelper.scheduleNotificationsForToday(requireContext())
+            findNavController().navigateUp()
         }
+
+        binding.editButton.setOnClickListener {
+            val int = Intent(requireContext(), AddOrUpdateHabyteActivity::class.java)
+            int.putExtra("habyteId", habyteId.toInt())
+            startActivity(int)
+        }
+    }
 
          private fun createCalendarEvents() {
 

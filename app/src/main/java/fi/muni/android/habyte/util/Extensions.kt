@@ -1,5 +1,6 @@
 package fi.muni.android.habyte.util
 
+import fi.muni.android.habyte.model.Habit
 import ca.antonious.materialdaypicker.MaterialDayPicker
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -10,6 +11,13 @@ fun LocalDate.daysUntil(endDate: LocalDate) : Int {
 
 fun Int.progressAsString(total: Int) : String {
     return "$this/$total"
+}
+
+fun List<Habit>.toIdsString() :String {
+    return this.map { it -> it.id }
+        .toString()
+        .replace(" ", "")
+        .removeSurrounding("[", "]")
 }
 
 fun MaterialDayPicker.Weekday.daysToWeekday(materialDayPicker: MaterialDayPicker.Weekday) : Long {

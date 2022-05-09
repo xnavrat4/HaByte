@@ -15,6 +15,12 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string name="notification_channel">HabyteChannel</string>
+    <string name="intent_preferences">intentsPref</string>
+    <string name="saved_intents">intents</string>
+    <string name="latest_intents_update_date">date</string>
+
     <string name="input_required">Required *</string>
     <string name="in_future_validation">Has to be in future</string>
     <string name="update_habyte_button_title">Update Habyte</string>
