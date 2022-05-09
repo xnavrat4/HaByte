@@ -113,26 +113,27 @@ class HabyteDetailFragment : Fragment() {
                 intent.putExtra("beginTime", i.start)
                 intent.putExtra("time", true)
                 intent.putExtra("rule", "FREQ=YEARLY")
-                intent.putExtra("endTime", i.start.plusHours(1))
-                intent.putExtra("title", binding.habitName.toString())
+                var endTime = i.start.plusHours(1)
+                intent.putExtra("endTime", endTime)
+                intent.putExtra("title", binding.habitName.text.toString())
                 startActivity(intent)
             }
         }
 
         private fun requestCalendarPermission() {
             if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    this as Activity,
+                    activity as MainActivity,
                     Manifest.permission.WRITE_CALENDAR
                 )
             ) {
-                AlertDialog.Builder(this)
+                AlertDialog.Builder(activity)
                     .setTitle("Permission needed")
                     .setMessage("This permission is needed to create calendar events")
                     .setPositiveButton("ok",
                         DialogInterface.OnClickListener { dialog, which ->
 
                             ActivityCompat.requestPermissions(
-                                this as MainActivity, arrayOf(
+                                activity as MainActivity, arrayOf(
                                     Manifest.permission.WRITE_CALENDAR
                                 ), CALLENDAR_PERMISSION_CODE
                             )
@@ -142,7 +143,7 @@ class HabyteDetailFragment : Fragment() {
                     .create().show()
             } else {
                 ActivityCompat.requestPermissions(
-                    this,
+                    activity as MainActivity,
                     arrayOf(Manifest.permission.WRITE_CALENDAR),
                     CALLENDAR_PERMISSION_CODE
                 )
