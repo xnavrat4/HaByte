@@ -140,6 +140,7 @@ class AddOrUpdateHabyteActivity : AppCompatActivity() {
             } else {
                 viewModel.createHabyte(title, description, startLocalTime, endDateLD, selectedDays)
             }
+            NotificationHelper.scheduleNotificationsForToday(this)
         }
 
         viewModel.queryResult.observe(this) { result ->
