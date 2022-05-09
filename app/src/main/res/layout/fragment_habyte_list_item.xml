@@ -14,8 +14,9 @@
         android:paddingStart="16dp"
         android:paddingTop="16dp"
         android:paddingEnd="8dp"
+        android:backgroundTint="@android:color/darker_gray"
         android:paddingBottom="16dp">
-        <!--            android:textAlignment="left"-->
+
         <TextView
             android:id="@+id/habit_name"
             android:textColor="@color/black"
@@ -26,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="habit name" />
 
-
+<!--
         <TextView
             android:id="@+id/upcoming_habit_label"
             android:layout_width="0dp"
@@ -35,7 +36,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/start_date_label"
             app:layout_constraintTop_toBottomOf="@id/habit_name"
-            tools:text="upcoming date" />
+            android:text="Upcoming date" />
         <TextView
             android:id="@+id/upcoming_habit_text"
             android:layout_width="0dp"
@@ -45,23 +46,23 @@
             app:layout_constraintEnd_toStartOf="@id/start_date_text"
             app:layout_constraintTop_toBottomOf="@id/upcoming_habit_label"
             tools:text="zitra" />
-
+-->
 
         <TextView
             android:id="@+id/start_date_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            app:layout_constraintStart_toEndOf="@id/upcoming_habit_label"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/end_date_label"
             app:layout_constraintTop_toBottomOf="@id/habit_name"
-            tools:text="start date" />
+            android:text="Start date" />
         <TextView
             android:id="@+id/start_date_text"
             android:layout_width="0dp"
             android:textColor="@color/black"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/upcoming_habit_text"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/end_date_text"
             app:layout_constraintTop_toBottomOf="@id/start_date_label"
             tools:text="vcera" />
@@ -74,7 +75,7 @@
             app:layout_constraintStart_toEndOf="@id/start_date_label"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/habit_name"
-            tools:text="end date" />
+            android:text="End date" />
         <TextView
             android:id="@+id/end_date_text"
             android:layout_width="0dp"
@@ -106,6 +107,7 @@
             app:layout_constraintTop_toBottomOf="@id/progress_label"
             android:max="100"
             android:progress="20"
+
             />
 
 

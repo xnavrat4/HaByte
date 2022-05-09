@@ -1,7 +1,6 @@
 package fi.muni.android.habyte.ui.detail
 
 import android.Manifest
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
@@ -12,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -30,6 +28,8 @@ import fi.muni.android.habyte.util.NotificationHelper
 import fi.muni.android.habyte.util.progressAsString
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 
 
 class HabyteDetailFragment : Fragment() {
@@ -69,14 +69,15 @@ class HabyteDetailFragment : Fragment() {
         viewModel.observeHabyte().observe(viewLifecycleOwner) {
             it?.let {
                 binding.habitName.text = it.name
-                binding.startDateText.text = it.startDate.toString()
-                binding.endDateText.text = it.endDate.toString()
+                binding.startDateText.text = it.startDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                binding.endDateText.text = it.endDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                binding.daysLeftText.text = Period.between( it.startDate, it.endDate).days.toString()
                 binding.bar.max = it.habitsToDo
                 binding.bar.progress = it.habitsFinished
                 binding.progressLabel.text = it.habitsFinished.progressAsString(it.habitsToDo)
             }
         }
-
+/*
         binding.exportButton.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
                     context as Activity,
@@ -88,6 +89,8 @@ class HabyteDetailFragment : Fragment() {
                 requestCalendarPermission();
             }
         }
+
+        */
         binding.deleteButton.setOnClickListener {
             viewModel.deleteHabyte()
             NotificationHelper.scheduleNotificationsForToday(requireContext())
