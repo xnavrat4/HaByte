@@ -23,7 +23,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:background="@color/background">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/habyte_name_layout"
@@ -153,7 +154,8 @@
             android:text="@string/add_habyte"
             android:theme="@style/ShapeAppearance.MaterialComponents.SmallComponent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/week_day_selection" />
+            app:layout_constraintTop_toBottomOf="@id/week_day_selection"
+            android:textColor="@color/black"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

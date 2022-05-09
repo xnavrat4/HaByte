@@ -2,11 +2,11 @@
     <!-- Base application theme. -->
     <style name="Theme.Habyte" parent="Theme.MaterialComponents">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/beige</item>
+        <item name="colorPrimaryVariant">@color/item_background</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondary">@color/mint_green</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
@@ -72,8 +72,18 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.Habyte.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.Habyte.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorPrimary">@color/background</item>
+        <item name="colorPrimaryDark">@color/background</item>
+        <item name="colorAccent">@color/beige</item>
+    </style>
 
     <style name="Theme.Habyte.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="ItemCard" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">12dp</item>
+        <item name="strokeColor">@color/beige</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
     
 </resources>

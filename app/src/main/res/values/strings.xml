@@ -25,4 +25,11 @@
     <string name="in_future_validation">Has to be in future</string>
     <string name="update_habyte_button_title">Update Habyte</string>
     <string name="add_habyte_button_title">Add Habyte</string>
+
+    <string name="start_date">Start date:</string>>
+    <string name="end_date">End date:</string>
+    <string name="habyte_list_title">Your Habytes</string>
+    <string name="habit_list_title">For Today</string>
+    <string name="create_habyte_page_title">Create Habyte</string>
+    <string name="update_habyte_page_title">Update Habyte</string>>
 </resources>
