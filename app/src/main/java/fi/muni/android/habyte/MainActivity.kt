@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import fi.muni.android.habyte.databinding.ActivityMainBinding
 import fi.muni.android.habyte.util.NotificationHelper
@@ -37,6 +38,11 @@ class MainActivity : AppCompatActivity() {
         binding.createHabyteButton.setOnClickListener {
             val int = Intent(this, AddOrUpdateHabyteActivity::class.java)
             startActivity(int)
+        }
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            binding.bottomNavBar.isVisible = destination.id != R.id.habyte_detail_fragment
+            binding.createHabyteButton.isVisible = destination.id != R.id.habyte_detail_fragment
         }
 
         NotificationHelper.createNotificationChannel(this)

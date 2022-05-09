@@ -17,17 +17,19 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import fi.muni.android.habyte.AddOrUpdateHabyteActivity
 import fi.muni.android.habyte.HabyteApplication
 import fi.muni.android.habyte.MainActivity
 import fi.muni.android.habyte.databinding.FragmentHabyteDetailBinding
+import fi.muni.android.habyte.model.Habit
+import fi.muni.android.habyte.ui.list.habit.HabitAdapter
 import fi.muni.android.habyte.ui.list.habit.HabitListViewModel
 import fi.muni.android.habyte.ui.list.habit.HabitListViewModelFactory
 import fi.muni.android.habyte.util.NotificationHelper
 import fi.muni.android.habyte.util.progressAsString
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import java.time.LocalDate
 
 
 class HabyteDetailFragment : Fragment() {
@@ -36,7 +38,9 @@ class HabyteDetailFragment : Fragment() {
 
     private lateinit var viewModel: HabyteDetailViewModel
 
-    val CALLENDAR_PERMISSION_CODE = 0
+    private lateinit var habitViewModel: HabitListViewModel
+
+    var CALLENDAR_PERMISSION_CODE = 0
 
     var habyteID = "";
 
@@ -95,69 +99,101 @@ class HabyteDetailFragment : Fragment() {
             int.putExtra("habyteId", habyteId.toInt())
             startActivity(int)
         }
-    }
 
-         private fun createCalendarEvents() {
+        habitViewModel = ViewModelProvider(
+            this,
+            HabitListViewModelFactory(db.habitDao(), db.habyteDao())
+        ).get(HabitListViewModel::class.java)
 
-             val habitviewModel: HabitListViewModel by viewModels {
-                val db = (activity?.application as HabyteApplication).db
-                HabitListViewModelFactory(db.habitDao(), db.habyteDao())
-            }
+        val adapter = HabitAdapter(habitViewModel::confirmHabit)
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.adapter = adapter
 
-            val data = runBlocking { habitviewModel.getHabitsOfHabyte(habyteID.toInt()); }
-
-            data.forEach { i ->
-                val cal: Calendar = Calendar.getInstance()
-                val intent = Intent(Intent.ACTION_EDIT)
-                intent.type = "vnd.android.cursor.item/event"
-                intent.putExtra("beginTime", i.start)
-                intent.putExtra("time", true)
-                intent.putExtra("rule", "FREQ=YEARLY")
-                intent.putExtra("endTime", i.start.plusHours(1))
-                intent.putExtra("title", binding.habitName.toString())
-                startActivity(intent)
-            }
-        }
-
-        private fun requestCalendarPermission() {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    this as Activity,
-                    Manifest.permission.WRITE_CALENDAR
-                )
-            ) {
-                AlertDialog.Builder(this)
-                    .setTitle("Permission needed")
-                    .setMessage("This permission is needed to create calendar events")
-                    .setPositiveButton("ok",
-                        DialogInterface.OnClickListener { dialog, which ->
-
-                            ActivityCompat.requestPermissions(
-                                this as MainActivity, arrayOf(
-                                    Manifest.permission.WRITE_CALENDAR
-                                ), CALLENDAR_PERMISSION_CODE
-                            )
-                        })
-                    .setNegativeButton("cancel",
-                        DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() })
-                    .create().show()
-            } else {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.WRITE_CALENDAR),
-                    CALLENDAR_PERMISSION_CODE
-                )
-            }
-        }
-
-        override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<String?>,
-            grantResults: IntArray
-        ) {
-            if (requestCode == CALLENDAR_PERMISSION_CODE) {
-                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    createCalendarEvents()
+        this.viewModel.currentSelectedDate.observe(viewLifecycleOwner) {
+            //val habits = this.viewModel.getHabitesOfHabyte().value
+            var list = mutableListOf<Habit>()
+            val habits = runBlocking { viewModel.getHabitesOfHabyteId() }
+            habits?.forEach { i ->
+                if (i.start.dayOfMonth == it?.dayOfMonth && i.start.month == it?.month && i.start.year == it?.year) {
+                    list.add(i)
                 }
             }
+            adapter.submitList(list)
+        }
+        this.viewModel.getHabitesOfHabyte().observe(viewLifecycleOwner) {
+            var list = mutableListOf<Habit>()
+            val date = viewModel.currentSelectedDate.value;
+            it?.forEach { i ->
+                if (i.start.dayOfMonth == date?.dayOfMonth && i.start.month == date?.month && i.start.year == date?.year) {
+                    list.add(i)
+                }
+            }
+            adapter.submitList(list)
+        }
+        viewModel.setCurrentSelectedDate(LocalDate.now())
+        binding.calendar.setOnDateChangeListener { calendarView, year, month, day ->
+            this.viewModel.setCurrentSelectedDate(LocalDate.of(year, month + 1, day))
         }
     }
+
+    private fun createCalendarEvents() {
+        val habitviewModel: HabitListViewModel by viewModels {
+            val db = (activity?.application as HabyteApplication).db
+            HabitListViewModelFactory(db.habitDao(), db.habyteDao())
+        }
+        val data = runBlocking { habitviewModel.getHabitsOfHabyte(habyteID.toInt()); }
+        data.forEach { i ->
+            val cal: Calendar = Calendar.getInstance()
+            val intent = Intent(Intent.ACTION_EDIT)
+            intent.type = "vnd.android.cursor.item/event"
+            intent.putExtra("beginTime", i.start)
+            intent.putExtra("time", true)
+            intent.putExtra("rule", "FREQ=YEARLY")
+            var endTime = i.start.plusHours(1)
+            intent.putExtra("endTime", endTime)
+            intent.putExtra("title", binding.habitName.text.toString())
+            startActivity(intent)
+        }
+    }
+
+    private fun requestCalendarPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(
+                activity as MainActivity,
+                Manifest.permission.WRITE_CALENDAR
+            )
+        ) {
+            AlertDialog.Builder(activity)
+                .setTitle("Permission needed")
+                .setMessage("This permission is needed to create calendar events")
+                .setPositiveButton("ok",
+                    DialogInterface.OnClickListener { dialog, which ->
+                        ActivityCompat.requestPermissions(
+                            activity as MainActivity, arrayOf(
+                                Manifest.permission.WRITE_CALENDAR
+                            ), CALLENDAR_PERMISSION_CODE
+                        )
+                    })
+                .setNegativeButton("cancel",
+                    DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() })
+                .create().show()
+        } else {
+            ActivityCompat.requestPermissions(
+                activity as MainActivity,
+                arrayOf(Manifest.permission.WRITE_CALENDAR),
+                CALLENDAR_PERMISSION_CODE
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String?>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == CALLENDAR_PERMISSION_CODE) {
+            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                createCalendarEvents()
+            }
+        }
+    }
+}
