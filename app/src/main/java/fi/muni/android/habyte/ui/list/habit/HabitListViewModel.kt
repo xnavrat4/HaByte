@@ -8,22 +8,14 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-class HabitListViewModel(private val dao: HabitDao, private val habyteDao: HabyteDao, private val habyteID : Int = 0, private val date: LocalDateTime = LocalDateTime.MIN): ViewModel() {
+class HabitListViewModel(private val dao: HabitDao, private val habyteDao: HabyteDao): ViewModel() {
 
     private val todaysHabits: LiveData<List<Habit>> by lazy {
         dao.findHabitsOnDate(LocalDate.now(), false).asLiveData()
     }
 
-    private val habitsOfHabyteOnDate: LiveData<List<Habit>> by lazy {
-        dao.findHabitsWithHabyteOnDate(habyteID, date, date.plusDays(1)).asLiveData()
-    }
-
     fun getHabitsForToday() : LiveData<List<Habit>> {
         return todaysHabits
-    }
-
-    fun getHabitesForDay(): LiveData<List<Habit>> {
-        return habitsOfHabyteOnDate;
     }
 
     suspend fun getHabitsOfHabyte(id : Int) : List<Habit> {
@@ -39,11 +31,11 @@ class HabitListViewModel(private val dao: HabitDao, private val habyteDao: Habyt
     }
 }
 
-class HabitListViewModelFactory(private val dao: HabitDao, private val habyteDao: HabyteDao, private val habyteID : Int = 0, private val date: LocalDateTime = LocalDateTime.MIN) : ViewModelProvider.Factory {
+class HabitListViewModelFactory(private val dao: HabitDao, private val habyteDao: HabyteDao) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(HabitListViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return HabitListViewModel(dao, habyteDao, habyteID, date ) as T
+            return HabitListViewModel(dao, habyteDao) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

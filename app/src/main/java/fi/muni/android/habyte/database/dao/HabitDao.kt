@@ -20,6 +20,10 @@ interface HabitDao {
     suspend fun findHabitsByHabyte(habyteId: Int): List<Habit>
 
     @Transaction
+    @Query("SELECT * FROM habit WHERE habyteId = :habyteId order by start")
+    fun findHabitsByHabyteId(habyteId: Int): Flow<List<Habit>>
+
+    @Transaction
     @Query("SELECT * FROM habit WHERE habyteId = :habyteId order by start desc limit 1")
     fun findLatestHabitByHabyte(habyteId: Int): Flow<Habit>
 
@@ -28,8 +32,8 @@ interface HabitDao {
     fun findHabitsWithHabyteOlderThan(habyteId: Int, date: LocalDateTime): Flow<List<Habit>>
 
     @Transaction
-    @Query("SELECT * FROM habit WHERE habyteId = :habyteId AND start >= :date AND start < :nextDay")
-    fun findHabitsWithHabyteOnDate(habyteId: Int, date: LocalDateTime, nextDay : LocalDateTime): Flow<List<Habit>>
+    @Query("SELECT * FROM habit WHERE habyteId = :habyteId AND start = :date")
+    fun findHabitsWithHabyteOnDate(habyteId: Int, date: LocalDateTime): Flow<List<Habit>>
 
     @Transaction
     @Query(

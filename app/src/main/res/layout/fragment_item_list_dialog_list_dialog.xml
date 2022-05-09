@@ -9,6 +9,4 @@
     android:paddingBottom="@dimen/list_item_spacing_half"
     tools:context=".HabiteListDialogFragment"
     tools:listitem="@layout/fragment_item_list_dialog_list_dialog_item"
-
-
     />
