@@ -9,12 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/background">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
 
             <TextView
                 android:id="@+id/habit_name"
@@ -23,145 +23,158 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/delete_button"
+                app:layout_constraintBottom_toTopOf="@id/start_date_label"
+                android:textAppearance="@style/TextMedium.Light"
                 android:text="Name"
             />
+            <!--
+                        <Button
+                            android:id="@+id/export_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintStart_toEndOf="@id/habit_name"
+                            app:layout_constraintEnd_toStartOf="@id/delete_button"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:drawableLeft="@android:drawable/ic_menu_add"
+                            />
+            -->
+                        <Button
+                            android:id="@+id/delete_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            app:layout_constraintStart_toEndOf="@id/habit_name"
+                            app:layout_constraintEnd_toStartOf="@id/edit_button"
 
-            <Button
-                android:id="@+id/export_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@id/habit_name"
-                app:layout_constraintEnd_toStartOf="@id/delete_button"
-                app:layout_constraintTop_toTopOf="parent"
-                android:drawableLeft="@android:drawable/ic_menu_add"
-                />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:drawableLeft="@android:drawable/ic_menu_delete"
+                        />
 
-            <Button
-                android:id="@+id/delete_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@id/export_button"
-                app:layout_constraintEnd_toStartOf="@id/edit_button"
-                app:layout_constraintTop_toTopOf="parent"
-                android:drawableLeft="@android:drawable/ic_menu_delete"
-            />
+                        <Button
+                            android:id="@+id/edit_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            app:layout_constraintStart_toEndOf="@id/delete_button"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:drawableLeft="@android:drawable/ic_menu_edit"
+                            />
 
-            <Button
-                android:id="@+id/edit_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@id/delete_button"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:drawableLeft="@android:drawable/ic_menu_edit"
-                />
+                        <TextView
+                            android:id="@+id/start_date_label"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/end_date_label"
+                            app:layout_constraintTop_toBottomOf="@id/delete_button"
+                            android:textAppearance="@style/TextSmall.Light"
+                            android:text="Start date" />
 
-            <TextView
-                android:id="@+id/start_date_label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/end_date_label"
-                app:layout_constraintTop_toBottomOf="@id/delete_button"
-                tools:text="start date" />
-            <TextView
-                android:id="@+id/start_date_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/end_date_text"
-                app:layout_constraintTop_toBottomOf="@id/start_date_label"
-                tools:text="vcera" />
+                        <TextView
+                            android:id="@+id/start_date_text"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/end_date_text"
+                            android:textAppearance="@style/TextSmall.Light"
+                            app:layout_constraintTop_toBottomOf="@id/start_date_label"
+                            tools:text="vcera" />
 
-            <TextView
-                android:id="@+id/end_date_label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@id/start_date_label"
-                app:layout_constraintEnd_toStartOf="@id/days_left_label"
-                app:layout_constraintTop_toBottomOf="@id/delete_button"
-                tools:text="end date" />
-            <TextView
-                android:id="@+id/end_date_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@id/start_date_text"
-                app:layout_constraintEnd_toStartOf="@id/days_left_text"
-                app:layout_constraintTop_toBottomOf="@id/end_date_label"
-                tools:text="v nedeli" />
+                        <TextView
+                            android:id="@+id/end_date_label"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextSmall.Light"
+                            app:layout_constraintStart_toEndOf="@id/start_date_label"
+                            app:layout_constraintEnd_toStartOf="@id/days_left_label"
+                            app:layout_constraintTop_toBottomOf="@id/delete_button"
+                            android:text="End date" />
+                        <TextView
+                            android:id="@+id/end_date_text"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextSmall.Light"
+                            app:layout_constraintStart_toEndOf="@id/start_date_text"
+                            app:layout_constraintEnd_toStartOf="@id/days_left_text"
+                            app:layout_constraintTop_toBottomOf="@id/end_date_label"
+                            tools:text="v nedeli" />
 
-            <TextView
-                android:id="@+id/days_left_label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@id/end_date_label"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/delete_button"
-                tools:text="days left" />
-            <TextView
-                android:id="@+id/days_left_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@id/end_date_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/days_left_label"
-                tools:text="12" />
+                        <TextView
+                            android:id="@+id/days_left_label"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextSmall.Light"
+                            app:layout_constraintStart_toEndOf="@id/end_date_label"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/delete_button"
+                            android:text="Days left" />
+                        <TextView
+                            android:id="@+id/days_left_text"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextSmall.Light"
+                            app:layout_constraintStart_toEndOf="@id/end_date_text"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/days_left_label"
+                            tools:text="12" />
 
-            <TextView
-                android:id="@+id/progress_label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:gravity="right"
-                android:text="20/100"
-                app:layout_constraintTop_toBottomOf="@id/end_date_text"
-                />
-            <ProgressBar
-                android:id="@+id/bar"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                style="?android:attr/progressBarStyleHorizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/progress_label"
-                android:max="100"
-                android:progress="20"
-                />
+                        <TextView
+                            android:id="@+id/progress_label"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:gravity="right"
+                            android:text="20/100"
+                            app:layout_constraintTop_toBottomOf="@id/end_date_text"
+                            />
+                        <ProgressBar
+                            android:id="@+id/bar"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/progress_label"
+                            android:max="100"
+                            android:progress="20"
+                            />
 
-            <CalendarView
-                android:id="@+id/calendar"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/bar"
+                        <CalendarView
+                            android:id="@+id/calendar"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/bar"
 
-                />
+                            />
 
-            <TextView
-                android:id="@+id/habits_label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@id/recyclerView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/calendar"
-                android:text="Habits for selected day"
-                />
+                        <TextView
+                            android:id="@+id/habits_label"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextRegular.Light"
+                            app:layout_constraintBottom_toTopOf="@id/recyclerView"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/calendar"
+                            android:text="Habits for selected day"
+                            />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/habits_label"
-                tools:listitem="@layout/fragment_habit_list_item" />
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerView"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/habits_label"
+                            tools:listitem="@layout/fragment_habit_list_item" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.core.widget.NestedScrollView>
+                </androidx.core.widget.NestedScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>

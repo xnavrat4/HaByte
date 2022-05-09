@@ -5,7 +5,8 @@ import fi.muni.android.habyte.R
 import fi.muni.android.habyte.databinding.FragmentHabyteListItemBinding
 import fi.muni.android.habyte.model.Habyte
 import fi.muni.android.habyte.util.progressAsString
-import java.util.*
+import java.time.format.DateTimeFormatter
+
 
 class HabyteViewHolder(private val binding: FragmentHabyteListItemBinding)
     : RecyclerView.ViewHolder(binding.root) {
@@ -15,8 +16,8 @@ class HabyteViewHolder(private val binding: FragmentHabyteListItemBinding)
             onItemClick: (Habyte) -> Unit
         ) {
             binding.habitName.text = listItem.name
-            binding.startDateText.text = listItem.startDate.toString()
-            binding.endDateText.text = listItem.endDate.toString()
+            binding.startDateText.text = listItem.startDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+            binding.endDateText.text = listItem.endDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
 
             binding.bar.max = listItem.habitsToDo
             binding.bar.progress = listItem.habitsFinished
