@@ -33,6 +33,9 @@
         <argument
             android:name="id"
             app:argType="string" />
+        <action
+            android:id="@+id/action_habyte_detail_fragment_to_habitListDialogFragment"
+            app:destination="@id/habitListDialogFragment" />
     </fragment>
 
     <dialog
