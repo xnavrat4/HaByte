@@ -33,6 +33,7 @@ class HabitList : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val adapter = HabitAdapter(viewModel::confirmHabit)
+        activity?.actionBar?.title = "ASLKDJAS"
 
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter

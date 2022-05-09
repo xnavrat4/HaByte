@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/habit_list_fragment"
         android:name="fi.muni.android.habyte.ui.list.habit.HabitList"
-        android:label="HabitList"
+        android:label="Today's reminders"
         tools:layout="@layout/fragment_habit_list" >
     </fragment>
 
@@ -16,7 +16,7 @@
     <fragment
         android:id="@+id/habyte_list_fragment"
         android:name="fi.muni.android.habyte.ui.list.habyte.HabyteList"
-        android:label="HabyteList"
+        android:label="@string/habyte_list_title"
         tools:layout="@layout/fragment_habyte_list" >
         <action
             android:id="@+id/action_habyte_list_fragment_to_habyte_detail_fragment"

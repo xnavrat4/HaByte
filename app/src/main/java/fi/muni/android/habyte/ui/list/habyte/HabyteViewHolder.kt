@@ -1,10 +1,12 @@
 package fi.muni.android.habyte.ui.list.habyte
 
 import androidx.recyclerview.widget.RecyclerView
+import fi.muni.android.habyte.R
 import fi.muni.android.habyte.databinding.FragmentHabyteListItemBinding
 import fi.muni.android.habyte.model.Habyte
 import fi.muni.android.habyte.util.progressAsString
 import java.time.format.DateTimeFormatter
+
 
 class HabyteViewHolder(private val binding: FragmentHabyteListItemBinding)
     : RecyclerView.ViewHolder(binding.root) {
@@ -20,6 +22,10 @@ class HabyteViewHolder(private val binding: FragmentHabyteListItemBinding)
             binding.bar.max = listItem.habitsToDo
             binding.bar.progress = listItem.habitsFinished
             binding.progressLabel.text = listItem.habitsFinished.progressAsString(listItem.habitsToDo)
+
+            binding.startDateLabel.text = binding.root.resources.getString(R.string.start_date)
+            binding.endDateLabel.text = binding.root.resources.getString(R.string.end_date)
+
 
             binding.cardContainer.setOnClickListener {
                 onItemClick(listItem)

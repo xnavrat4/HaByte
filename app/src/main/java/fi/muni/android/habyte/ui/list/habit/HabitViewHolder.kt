@@ -19,9 +19,10 @@ class HabitViewHolder(private val binding: FragmentHabitListItemBinding)
             }else if (listItem.start.dayOfMonth < LocalDate.now().dayOfMonth && listItem.done){
                 binding.cardContainer.setBackgroundColor(Color.parseColor("#008000"))
             }
+            binding.timeLabel.text = "${listItem.start.hour}:${listItem.start.minute}"
 
             binding.doneButton.setOnClickListener {
                 onDoneClick(listItem)
             }
         }
-    }
+}
