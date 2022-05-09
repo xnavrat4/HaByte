@@ -30,7 +30,6 @@ import fi.muni.android.habyte.util.NotificationHelper
 import fi.muni.android.habyte.util.progressAsString
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 
 class HabyteDetailFragment : Fragment() {

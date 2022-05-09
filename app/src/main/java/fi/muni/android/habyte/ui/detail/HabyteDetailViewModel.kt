@@ -6,7 +6,6 @@ import fi.muni.android.habyte.database.dao.HabyteDao
 import fi.muni.android.habyte.model.Habit
 import fi.muni.android.habyte.model.Habyte
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 
 class HabyteDetailViewModel (

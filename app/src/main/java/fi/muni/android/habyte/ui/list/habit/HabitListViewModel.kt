@@ -6,7 +6,6 @@ import fi.muni.android.habyte.database.dao.HabyteDao
 import fi.muni.android.habyte.model.Habit
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 class HabitListViewModel(private val dao: HabitDao, private val habyteDao: HabyteDao): ViewModel() {
 
