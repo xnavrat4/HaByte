@@ -1,7 +1,9 @@
 package fi.muni.android.habyte.database.typeconverters
 
+import android.net.Uri
 import androidx.room.TypeConverter
 import ca.antonious.materialdaypicker.MaterialDayPicker
+import java.net.URI
 import java.text.DecimalFormat
 import java.time.*
 import java.time.format.DateTimeFormatter
@@ -54,5 +56,14 @@ class Converters {
         return value?.let {
             value.map { it.toString() }.reduce{first, second -> "$first,$second"}
         }
+    }
+
+    @TypeConverter
+    fun stringToUri(uri: Uri?): String? {
+        return uri?.toString()
+    }
+    @TypeConverter
+    fun stringToUri(string:String?): Uri? {
+        return string?.let { Uri.parse(string) }
     }
 }

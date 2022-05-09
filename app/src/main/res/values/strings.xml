@@ -31,5 +31,8 @@
     <string name="habyte_list_title">Your Habytes</string>
     <string name="habit_list_title">For Today</string>
     <string name="create_habyte_page_title">Create Habyte</string>
-    <string name="update_habyte_page_title">Update Habyte</string>>
+    <string name="update_habyte_page_title">Update Habyte</string>
+    <string name="menu_add_picture">Add picture</string>
+    <string name="menu_add_description">Add description</string>
+    <string name="apply_button">APPLY</string>>
 </resources>
