@@ -10,8 +10,10 @@
         android:name="fi.muni.android.habyte.ui.list.habit.HabitList"
         android:label="Today's reminders"
         tools:layout="@layout/fragment_habit_list" >
+        <action
+            android:id="@+id/action_habit_list_fragment_to_habitListDialogFragment"
+            app:destination="@id/habitListDialogFragment" />
     </fragment>
-
 
     <fragment
         android:id="@+id/habyte_list_fragment"
@@ -31,6 +33,18 @@
         <argument
             android:name="id"
             app:argType="string" />
+        <action
+            android:id="@+id/action_habyte_detail_fragment_to_habitListDialogFragment"
+            app:destination="@id/habitListDialogFragment" />
     </fragment>
+
+    <dialog
+        android:id="@+id/habitListDialogFragment"
+        android:name="fi.muni.android.habyte.ui.list.habit.sheet.HabitListDialogFragment"
+        android:label="HabitListDialogFragment">
+        <argument
+            android:name="habit_id"
+            app:argType="integer" />
+    </dialog>
 
 </navigation>

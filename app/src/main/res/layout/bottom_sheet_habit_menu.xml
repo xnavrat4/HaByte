@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/download"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/image_text_view"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_baseline_description_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:hint="@string/menu_add_description"
+            android:inputType="text"
+            android:minHeight="48dp"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/apply_text_button"
+            app:layout_constraintStart_toEndOf="@id/image_text_view"
+            app:layout_constraintTop_toTopOf="parent"
+            android:autofillHints="" />
+
+        <Button
+            android:id="@+id/apply_text_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/apply_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/from_camera_menu_layout"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="8dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_baseline_add_a_photo_24"
+            android:layout_margin="8dp"/>
+
+        <TextView
+            android:id="@+id/take_picture_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/menu_add_picture"
+            android:textAppearance="@android:style/TextAppearance.Material.Medium"
+            android:layout_gravity="center_vertical"
+            android:padding="8dp"/>
+    </LinearLayout>
+</LinearLayout>

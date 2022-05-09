@@ -13,7 +13,7 @@ import java.util.*
 interface HabitDao {
 
     @Query("SELECT * FROM habit WHERE id = :habitId")
-    fun findHabitById(habitId: Int): Habit
+    suspend fun findHabitById(habitId: Int): Habit
 
     @Transaction
     @Query("SELECT * FROM habit WHERE habyteId = :habyteId order by start")

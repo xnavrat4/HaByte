@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import fi.muni.android.habyte.HabyteApplication
 import fi.muni.android.habyte.databinding.FragmentHabitListBinding
@@ -32,7 +33,14 @@ class HabitList : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = HabitAdapter(viewModel::confirmHabit)
+        val adapter = HabitAdapter(viewModel::confirmHabit) {
+            findNavController().navigate(
+                HabitListDirections.actionHabitListFragmentToHabitListDialogFragment(
+                    it.id
+                )
+            )
+        }
+
         activity?.actionBar?.title = "ASLKDJAS"
 
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())

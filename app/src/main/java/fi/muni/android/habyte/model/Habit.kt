@@ -1,9 +1,11 @@
 package fi.muni.android.habyte.model
 
+import android.net.Uri
 import android.os.Parcelable
 import androidx.room.*
 import androidx.room.ForeignKey.CASCADE
 import kotlinx.parcelize.Parcelize
+import java.net.URI
 import java.time.LocalDateTime
 import java.util.*
 
@@ -34,7 +36,7 @@ data class Habit(
     val additionalText: String?,
 
     @ColumnInfo(name = "photoPath")
-    val photoPath: String?,
+    val photoPath: Uri?,
 
     @ColumnInfo(name = "done", defaultValue = "false")
     val done: Boolean,

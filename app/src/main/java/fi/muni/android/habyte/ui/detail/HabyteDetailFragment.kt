@@ -22,6 +22,7 @@ import fi.muni.android.habyte.MainActivity
 import fi.muni.android.habyte.databinding.FragmentHabyteDetailBinding
 import fi.muni.android.habyte.model.Habit
 import fi.muni.android.habyte.ui.list.habit.HabitAdapter
+import fi.muni.android.habyte.ui.list.habit.HabitListDirections
 import fi.muni.android.habyte.ui.list.habit.HabitListViewModel
 import fi.muni.android.habyte.ui.list.habit.HabitListViewModelFactory
 import fi.muni.android.habyte.util.NotificationHelper
@@ -108,7 +109,13 @@ class HabyteDetailFragment : Fragment() {
             HabitListViewModelFactory(db.habitDao(), db.habyteDao())
         ).get(HabitListViewModel::class.java)
 
-        val adapter = HabitAdapter(habitViewModel::confirmHabit)
+        val adapter = HabitAdapter(habitViewModel::confirmHabit) {
+            findNavController().navigate(
+                HabyteDetailFragmentDirections.actionHabyteDetailFragmentToHabitListDialogFragment(
+                    it.id
+                )
+            )
+        }
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
 

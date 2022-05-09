@@ -6,9 +6,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import fi.muni.android.habyte.databinding.FragmentHabitListItemBinding
 import fi.muni.android.habyte.model.Habit
+import fi.muni.android.habyte.model.Habyte
 
 class HabitAdapter(
-    private val onDoneClick: (Habit) -> Unit
+    private val onDoneClick: (Habit) -> Unit,
+    private val onExpandMenu: (Habit) -> Unit
 ) : ListAdapter<Habit, HabitViewHolder>(HabitComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HabitViewHolder {
@@ -18,7 +20,7 @@ class HabitAdapter(
 
     override fun onBindViewHolder(holder: HabitViewHolder, position: Int) {
         val current = getItem(position)
-        holder.bind(current, onDoneClick)
+        holder.bind(current, onDoneClick, onExpandMenu)
     }
 
     class HabitComparator: DiffUtil.ItemCallback<Habit>() {
