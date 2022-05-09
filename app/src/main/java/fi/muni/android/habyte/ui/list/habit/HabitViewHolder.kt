@@ -14,10 +14,10 @@ class HabitViewHolder(private val binding: FragmentHabitListItemBinding)
 
         fun bind(listItem: Habit, onDoneClick: (Habit) -> Unit) {
             binding.habitName.text = listItem.name
-            binding.timeLabel.text =  listItem.start.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n" +listItem.start.format(DateTimeFormatter.ofPattern("HH:mm"))
+            binding.timeLabel.text =  listItem.start.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n" + listItem.start.format(DateTimeFormatter.ofPattern("HH:mm"))
             if (listItem.start.dayOfMonth < LocalDate.now().dayOfMonth && !listItem.done){
                 binding.cardContainer.strokeColor = (Color.parseColor("#ff0000"))
-            }else if (listItem.start.dayOfMonth < LocalDate.now().dayOfMonth && listItem.done){
+            }else if (listItem.done){
                 binding.cardContainer.strokeColor = Color.parseColor("#008000")
             }
             binding.timeLabel.text = "${listItem.start.hour}:${listItem.start.minute}"
