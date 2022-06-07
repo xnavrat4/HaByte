@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.Habyte" parent="Theme.MaterialComponents">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/beige</item>
+        <item name="colorPrimary">@android:color/holo_green_light</item>
         <item name="colorPrimaryVariant">@color/item_background</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
