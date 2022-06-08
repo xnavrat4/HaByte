@@ -4,11 +4,11 @@
     <item
         android:id="@+id/habit_list_fragment"
         android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/habit_list_title" />
+        android:title="@string/habit_list_title"/>
 
     <item
         android:id="@+id/placeholder"
-        android:title="" />
+        android:title=""/>
 
     <item
         android:id="@+id/habyte_list_fragment"

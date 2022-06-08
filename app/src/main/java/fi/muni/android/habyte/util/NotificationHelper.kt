@@ -98,7 +98,6 @@ object NotificationHelper {
                     apply()
                 }
 
-                Toast.makeText(context, "Notifications updated", Toast.LENGTH_SHORT).show()
             } catch (e: NoSuchElementException) {
                 Toast.makeText(context, "Error retrieving data from database",
                     Toast.LENGTH_SHORT).show();
