@@ -1,6 +1,7 @@
 package fi.muni.android.habyte.ui.list.habit
 
 import android.graphics.Color
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import fi.muni.android.habyte.databinding.FragmentHabitListItemBinding
 import fi.muni.android.habyte.model.Habit
@@ -22,6 +23,16 @@ class HabitViewHolder(private val binding: FragmentHabitListItemBinding)
                 binding.cardContainer.strokeColor = Color.parseColor("#008000")
             }
             binding.timeLabel.text = "${listItem.start.hour}:${listItem.start.minute}"
+            binding.photoPresentPhoto.visibility = View.INVISIBLE
+            binding.descriptionPresentPhoto.visibility = View.INVISIBLE
+
+            listItem.photoPath?.let {
+                binding.photoPresentPhoto.visibility = View.VISIBLE
+            }
+
+            listItem.additionalText?.let {
+                binding.descriptionPresentPhoto.visibility = View.VISIBLE
+            }
 
             binding.doneButton.setOnClickListener {
                 onDoneClick(listItem)

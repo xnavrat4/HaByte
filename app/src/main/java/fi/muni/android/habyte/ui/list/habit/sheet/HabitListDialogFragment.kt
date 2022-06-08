@@ -3,6 +3,7 @@ package fi.muni.android.habyte.ui.list.habit.sheet
 import android.Manifest
 import android.app.AlertDialog
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -10,12 +11,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
 import fi.muni.android.habyte.HabyteApplication
+import fi.muni.android.habyte.R
 import fi.muni.android.habyte.databinding.BottomSheetHabitMenuBinding
 import java.io.File
 import java.time.LocalDateTime
@@ -66,59 +69,74 @@ class HabitListDialogFragment : BottomSheetDialogFragment() {
         }
 
         binding.fromCameraMenuLayout.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-            }
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 1)
-            }
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.CAMERA
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                requestPermission(Manifest.permission.CAMERA, 1)
-            }
+            if (takePicture(id, takePictureResult)) return@setOnClickListener
+        }
 
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.CAMERA
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                Toast.makeText(
-                    requireContext(),
-                    "Cannot take pictures without necessary permissions",
-                    Toast.LENGTH_SHORT
-                ).show()
-                return@setOnClickListener
-            }
-
-            activity?.let {
-                val dir = it.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
-                val fileUri = FileProvider.getUriForFile(
-                    requireContext(),
-                    "com.example.android.fileprovider",
-                    File(dir, "${id}_${LocalDateTime.now()}}.jpg")
-                )
-                viewModel.path = fileUri
-                takePictureResult.launch(fileUri)
+        binding.applyTextButton.setOnClickListener {
+            if (binding.descriptionTextView.text?.toString()?.isNotBlank() == true) {
+                viewModel.updateHabyte(binding.descriptionTextView.text.toString(), null)
+                binding.applyTextButton.setTextColor(resources.getColor(R.color.mint_green))
             }
         }
         return binding.root
+    }
+
+    private fun takePicture(
+        id: Int,
+        takePictureResult: ActivityResultLauncher<Uri>
+    ): Boolean {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 1)
+        }
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermission(Manifest.permission.CAMERA, 1)
+        }
+
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Toast.makeText(
+                requireContext(),
+                "Cannot take pictures without necessary permissions",
+                Toast.LENGTH_SHORT
+            ).show()
+            return true
+        }
+
+        activity?.let {
+            val dir = it.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+            val fileUri = FileProvider.getUriForFile(
+                requireContext(),
+                "com.example.android.fileprovider",
+                File(dir, "${id}_${LocalDateTime.now()}}.jpg")
+            )
+            viewModel.path = fileUri
+            takePictureResult.launch(fileUri)
+        }
+        return false
     }
 
     private fun requestPermission(permission: String, requestCode: Int = 0) {

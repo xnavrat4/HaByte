@@ -34,14 +34,22 @@
             android:name="id"
             app:argType="string" />
         <action
-            android:id="@+id/action_habyte_detail_fragment_to_habitListDialogFragment"
-            app:destination="@id/habitListDialogFragment" />
+            android:id="@+id/action_habyte_detail_fragment_to_habitExtraDataDialogFragment"
+            app:destination="@id/habitExtraDataDialogFragment" />
     </fragment>
 
     <dialog
         android:id="@+id/habitListDialogFragment"
         android:name="fi.muni.android.habyte.ui.list.habit.sheet.HabitListDialogFragment"
         android:label="HabitListDialogFragment">
+        <argument
+            android:name="habit_id"
+            app:argType="integer" />
+    </dialog>
+    <dialog
+        android:id="@+id/habitExtraDataDialogFragment"
+        android:name="fi.muni.android.habyte.ui.list.habit.sheet.HabitExtraDataDialogFragment"
+        android:label="HabitExtraDataDialogFragment">
         <argument
             android:name="habit_id"
             app:argType="integer" />

@@ -111,7 +111,7 @@ class HabyteDetailFragment : Fragment() {
 
         val adapter = HabitAdapter(habitViewModel::confirmHabit) {
             findNavController().navigate(
-                HabyteDetailFragmentDirections.actionHabyteDetailFragmentToHabitListDialogFragment(
+                HabyteDetailFragmentDirections.actionHabyteDetailFragmentToHabitExtraDataDialogFragment(
                     it.id
                 )
             )
