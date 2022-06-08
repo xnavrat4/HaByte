@@ -15,6 +15,9 @@ interface HabitDao {
     @Query("SELECT * FROM habit WHERE id = :habitId")
     suspend fun findHabitById(habitId: Int): Habit
 
+    @Query("SELECT * FROM habit WHERE id = :habitId")
+    fun findHabitByIdFlow(habitId: Int): Flow<Habit>
+
     @Transaction
     @Query("SELECT * FROM habit WHERE habyteId = :habyteId order by start")
     suspend fun findHabitsByHabyte(habyteId: Int): List<Habit>

@@ -20,4 +20,6 @@
     <color name="magic_mint">#A4F9C8</color>
     <color name="mint_green">#A4F95F</color>
     <color name="beige">#EEF5DB</color>
+    <color name="info_yellow">#CDDC39</color>
+    <color name="little_green">#66BB6A</color>
 </resources>
