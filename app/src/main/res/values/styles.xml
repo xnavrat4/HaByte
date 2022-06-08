@@ -6,8 +6,9 @@
     </style>
 
     <style name="Button.Green" parent="ThemeOverlay.AppCompat">
-        <item name="colorAccent">@android:color/holo_green_dark
-        </item>
+        <item name="colorAccent">@android:color/holo_green_dark</item>
+        <item name="colorButtonNormal">@color/info_yellow</item>
+        <item name="backgroundTint">@color/mint_green</item>
     </style>
 
     <style name="ShapeAppearanceOverlay.App.CornerSize10Percent" parent="" >
