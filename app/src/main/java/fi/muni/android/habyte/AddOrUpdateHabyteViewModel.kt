@@ -96,7 +96,7 @@ class AddOrUpdateHabyteViewModel(
                 var lastDoneHabitIdx = 0
 
                 var habitsTodo: Int = oldHabyte.habitsToDo
-                if (selectedDays != oldHabyte.selectedDays) {
+                if (selectedDays != oldHabyte.selectedDays || startTime != oldHabyte.selectedTime) {
 
                     for (habit in allHabits) {
                         // delete undone habits older than today

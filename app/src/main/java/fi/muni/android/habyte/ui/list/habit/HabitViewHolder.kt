@@ -22,7 +22,6 @@ class HabitViewHolder(private val binding: FragmentHabitListItemBinding)
             }else if (listItem.done){
                 binding.cardContainer.strokeColor = Color.parseColor("#008000")
             }
-            binding.timeLabel.text = "${listItem.start.hour}:${listItem.start.minute}"
             binding.photoPresentPhoto.visibility = View.INVISIBLE
             binding.descriptionPresentPhoto.visibility = View.INVISIBLE
 
@@ -34,8 +33,15 @@ class HabitViewHolder(private val binding: FragmentHabitListItemBinding)
                 binding.descriptionPresentPhoto.visibility = View.VISIBLE
             }
 
-            binding.doneButton.setOnClickListener {
-                onDoneClick(listItem)
+            if (listItem.done) {
+                binding.doneButton.text = "Finished"
+                binding.doneButton.isEnabled = false
+            } else {
+                binding.doneButton.text = "DONE"
+                binding.doneButton.isEnabled = true
+                binding.doneButton.setOnClickListener {
+                    onDoneClick(listItem)
+                }
             }
 
             binding.expandableButton.setOnClickListener {
